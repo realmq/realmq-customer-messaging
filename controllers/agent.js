@@ -1,7 +1,13 @@
 'use strict';
 
 module.exports = {
-  index(req, res) {
-    res.render('agent/index');
+  async index(req, res) {
+    const {realmq} = req.app.locals;
+
+    const channelList = await realmq.channels.list();
+
+    res.render('agent/index', {
+      channelList,
+    });
   },
 };

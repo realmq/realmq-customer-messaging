@@ -1,1 +1,8 @@
 h1 Agent Dashboard
+
+if channelList.count
+  ul
+    each channel in channelList.items
+      li #{channel.id}
+else
+  p There are no channels
