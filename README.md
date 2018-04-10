@@ -27,4 +27,6 @@ $ cp .env.tpl .env
 
 | Env Var | Description | Default |
 |---------|---|---|
-| `PORT` | http port the server will listen to  | **8080** |
+| `PORT` | http port the server will listen to | **8080** |
+| `AGENT_USERNAME` | Username required to access `/agent` | **agent** |
+| `AGENT_PASSWORD` | Password of the agent user | **password** |

@@ -8,4 +8,9 @@ const {env} = process;
 
 module.exports = {
   port: env.PORT || 8080,
+
+  agent: {
+    username: env.AGENT_USERNAME || 'agent',
+    password: env.AGENT_PASSWORD || 'password',
+  },
 };

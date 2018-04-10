@@ -1,13 +1,20 @@
 'use strict';
 
 const path = require('path');
+const basicAuth = require('express-basic-auth');
 const chalk = require('chalk');
 const express = require('express');
 const logger = require('morgan');
 const config = require('./config');
-const {home} = require('./controllers');
+const {agent, home} = require('./controllers');
 
 const app = express();
+
+const {username, password} = config.agent;
+const restrictAccess = basicAuth({
+  users: {[username]: password},
+  challenge: true,
+});
 
 app.set('port', config.port);
 app.set('views', path.join(__dirname, 'views'));
@@ -16,6 +23,7 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 
 app.get('/', home);
+app.get('/agent', restrictAccess, agent.index);
 
 app.listen(app.get('port'), () => {
   console.log(
