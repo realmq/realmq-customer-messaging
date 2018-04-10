@@ -4,4 +4,8 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-module.exports = {};
+const {env} = process;
+
+module.exports = {
+  port: env.PORT || 8080,
+};
