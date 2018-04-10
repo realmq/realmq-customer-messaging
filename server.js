@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const express = require('express');
 const logger = require('morgan');
 const config = require('./config');
+const {home} = require('./controllers');
 
 const app = express();
 
@@ -13,6 +14,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
+
+app.get('/', home);
 
 app.listen(app.get('port'), () => {
   console.log(
