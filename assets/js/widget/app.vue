@@ -40,12 +40,29 @@
 </template>
 
 <script>
+  var RealMQ = require('../../../../realmq-web-sdk/dist/realmq-0.0.0');
+
+  var apiClient = new RealMQ.ApiClient(null, { baseUrl: '/' });
+
   module.exports = {
     name: 'app',
     data: function() {
       return {
+        session: null,
         isOpen: false,
       };
+    },
+    created: function() {
+      this.loadSession();
+    },
+    methods: {
+      loadSession: function() {
+        var $data = this.$data;
+
+        apiClient.get({ path: 'session' }).then(function(session) {
+          $data.session = session;
+        })
+      }
     }
   };
 </script>

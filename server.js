@@ -6,10 +6,11 @@ const chalk = require('chalk');
 const express = require('express');
 const logger = require('morgan');
 const RealMQ = require('@realmq/node-sdk');
+const asyncRoute = require('./lib/async-route');
 
 try {
   const config = require('./config');
-  const {agent, home} = require('./controllers');
+  const {agent, session, home} = require('./controllers');
 
   const app = express();
 
@@ -27,8 +28,9 @@ try {
   app.use(logger('dev'));
   app.use(express.static('public'));
 
-  app.get('/', home);
-  app.get('/agent', restrictAccess, agent.index);
+  app.get('/', asyncRoute(home));
+  app.get('/agent', asyncRoute(restrictAccess), asyncRoute(agent.index));
+  app.get('/session', asyncRoute(session.retrieve));
 
   app.listen(app.get('port'), () => {
     console.log(
