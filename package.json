@@ -12,7 +12,9 @@
     "lint-fix": "xo --fix",
     "start": "node server",
     "test": "echo 'No tests, yet' && exit 1",
-    "build-agent": "mkdir -p public/js && browserify assets/js/agent.js > public/js/agent.js"
+    "build-agent": "mkdir -p public/js && browserify assets/js/agent.js > public/js/agent.js",
+    "build-widget": "mkdir -p public/js && browserify assets/js/widget.js > public/js/widget.js",
+    "dist": "export NODE_ENV=production; for p in agent widget; do yarn build-${p} && uglifyjs public/js/${p}.js -o public/js/${p}.min.js; done"
   },
   "main": "server.js",
   "engines": {
@@ -26,12 +28,34 @@
   },
   "xo": {
     "space": true,
-    "prettier": true
+    "prettier": true,
+    "overrides": [
+      {
+        "files": "**/assets/js/**/*.js",
+        "envs": [
+          "browser"
+        ],
+        "parserOptions": {
+          "ecmaVersion": 5,
+          "sourceType": "script",
+          "ecmaFeatures": {
+            "globalReturn": false
+          }
+        },
+        "esnext": false,
+        "rules": {
+          "no-implicit-globals": "off"
+        }
+      }
+    ]
   },
   "devDependencies": {
     "browserify": "^16.1.1",
+    "envify": "^4.1.0",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.4",
+    "node-sass": "^4.8.3",
+    "uglify-js": "^3.3.20",
     "vueify": "^9.4.1",
     "xo": "^0.20.3"
   },
@@ -47,6 +71,7 @@
   },
   "browserify": {
     "transform": [
+      "envify",
       "vueify"
     ]
   },

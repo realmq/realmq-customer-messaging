@@ -10,7 +10,7 @@
 <script>
   module.exports = {
     name: 'app',
-    data() {
+    data: function() {
       return {
         title: 'Agent Dashboard',
         lead: 'Manage your customer cummunications.'
