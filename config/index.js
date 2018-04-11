@@ -12,6 +12,7 @@ module.exports = {
   agent: {
     username: env.AGENT_USERNAME || 'agent',
     password: env.AGENT_PASSWORD || 'password',
+    token: env.AGENT_TOKEN,
   },
 
   realmq: {
