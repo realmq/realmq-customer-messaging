@@ -23,9 +23,9 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@realmq/node-sdk@gitlab.com:realmq/realmq-node-sdk.git":
+"@realmq/node-sdk@git+ssh://git@gitlab.com/realmq/realmq-node-sdk.git":
   version "0.0.0"
-  resolved "gitlab.com:realmq/realmq-node-sdk.git#5f9af08bd526d74978c1626bbcc0bc4fbc9cba08"
+  resolved "git+ssh://git@gitlab.com/realmq/realmq-node-sdk.git#5f9af08bd526d74978c1626bbcc0bc4fbc9cba08"
   dependencies:
     mqtt "^2.17.0"
     request "^2.85.0"
