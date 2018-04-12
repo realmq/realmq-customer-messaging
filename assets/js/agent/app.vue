@@ -90,6 +90,7 @@
     .rmq-chat {
       flex-grow: 1;
       @include material-shadow(1);
+      padding: 1rem;
     }
   }
 

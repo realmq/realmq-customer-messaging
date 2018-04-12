@@ -83,13 +83,14 @@
 
   .rmq-chat-input {
     background: $white;
+    position: relative;
 
     .rmq-message-input {
       height: $navHeight;
       background: $white;
       border: none;
       width: calc(100% - #{$navHeight});
-      padding: 5%;
+      padding: .5rem;
       resize: none;
       overflow: scroll;
       padding-top: ($navHeight/2) - 8;
