@@ -1,7 +1,7 @@
 <template>
   <div class="rmq-widget">
     <transition name="rmq-fade-in">
-      <div v-if="isOpen" class="rmq-window">
+      <div v-show="isOpen" class="rmq-window">
         <div class="rmq-window-nav">
           <div class="rmq-nav-toggle"></div>
           <div class="rmq-nav-item">
@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="rmq-window-body">
-          <widget-chat class="rmq-chat" :realmq="realmq" :channel="session.channel" :user-id="session.userId"></widget-chat>
+          <widget-chat v-if="realmq" class="rmq-chat" :realmq="realmq" :channel="session && session.channel" :user-id="session && session.userId"></widget-chat>
         </div>
         <div class="rmq-window-footer"></div>
       </div>
