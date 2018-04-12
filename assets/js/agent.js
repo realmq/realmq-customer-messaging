@@ -7,7 +7,7 @@ var App = require('./agent/app.vue');
 var VueApp = Vue.extend(App);
 var appNode = document.getElementById('app');
 
-var realmq = new RealMQ(appNode.dataset.authToken);
+var realmq = new RealMQ(appNode.dataset.authToken, {autoSubscribe: true});
 
 module.exports = new VueApp({
   el: appNode,

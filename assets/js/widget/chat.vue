@@ -57,7 +57,7 @@
   }
 </script>
 <style lang="scss" scoped>
-  @import "styles/variables";
+  @import "../../styles/variables";
 
   .rmq-chat {
     height: 100%;

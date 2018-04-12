@@ -1,0 +1,90 @@
+@import "variables";
+
+.rmq-window {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: white;
+  position: relative;
+  @include material-shadow(3);
+  transition: $trans;
+
+  .rmq-window-body {
+    flex-grow: 1;
+    overflow: scroll;
+    padding: ($navHeight - ($navHeight/1.5)) / 2;
+    background: darken($white, 5%);
+
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+
+    &::-webkit-scrollbar {
+      width: 0 !important
+    }
+  }
+
+  .rmq-window-nav {
+    height: $navHeight;
+    z-index: $nav;
+    background-color: $primary;
+    border-bottom: 3px solid darken($primary, 10%);;
+    color: $white;
+    @include material-shadow(1);
+
+    .rmq-nav-toggle {
+      height: 32px;
+      width: 32px;
+      background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjQ4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSI0OCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMjAgMTFINy44M2w1LjU5LTUuNTlMMTIgNGwtOCA4IDggOCAxLjQxLTEuNDFMNy44MyAxM0gyMHYtMnoiLz48L3N2Zz4=);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: $navHeight/2.5;
+      margin: 16px;
+      float: left;
+      cursor: pointer;
+    }
+
+    .rmq-nav-options {
+      height: 32px;
+      width: 32px;
+      background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjQ4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSI0OCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMTIgOGMxLjEgMCAyLS45IDItMnMtLjktMi0yLTItMiAuOS0yIDIgLjkgMiAyIDJ6bTAgMmMtMS4xIDAtMiAuOS0yIDJzLjkgMiAyIDIgMi0uOSAyLTItLjktMi0yLTJ6bTAgNmMtMS4xIDAtMiAuOS0yIDJzLjkgMiAyIDIgMi0uOSAyLTItLjktMi0yLTJ6Ii8+PC9zdmc+);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: $navHeight/2.5;
+      margin: 16px;
+      position: absolute;
+      right: 0;
+      cursor: pointer;
+    }
+  }
+
+  .rmq-nav-logo {
+    background: white;
+    img {
+      height: $navHeight/2;
+      margin: $navHeight/4;
+    }
+  }
+
+  .rmq-nav-item {
+    float: left;
+    height: $navHeight;
+    margin-right: 50px;
+    position: relative;
+    line-height: $navHeight;
+    transition: $trans;
+
+    .rmq-nav-item-link {
+      display: block;
+      position: relative;
+      height: $navHeight;
+      width: 100%;
+
+      text-align: center;
+      line-height: $navHeight;
+      text-decoration: none;
+      color: inherit;
+
+      transition: $trans;
+    }
+  }
+}
