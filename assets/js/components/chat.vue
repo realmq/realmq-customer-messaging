@@ -14,8 +14,8 @@
         </template>
       </div>
       <div class="rmq-chat-input">
-        <textarea class="rmq-message-input"></textarea>
-        <div class="rmq-message-submit"></div>
+        <textarea class="rmq-message-input" v-model="messageInput"></textarea>
+        <div class="rmq-message-submit" @click="onMessageSubmit()"></div>
       </div>
     </template>
     <template v-else>
@@ -42,7 +42,8 @@
     data: function() {
       return {
         isConnected: false,
-        messages: []
+        messages: [],
+        messageInput: ''
       };
     },
     created: function() {
@@ -81,6 +82,32 @@
 
       isMyMessage: function(message) {
         return message.from.userId === this.userId;
+      },
+
+      onMessageSubmit: function() {
+        var message = this.messageInput.trim();
+
+        if (message) {
+          this.realmq.rtm.publish({
+            channel: this.channel,
+            message: this._assembleMessage(message)
+          });
+
+          this.$data.messageInput = '';
+        }
+      },
+
+      _assembleMessage: function(text) {
+        return {
+          type: 'message',
+          ts: (new Date).toISOString(),
+          from: {
+            userId: this.userId
+          },
+          content: [{
+            text: text
+          }]
+        };
       }
     }
   }
