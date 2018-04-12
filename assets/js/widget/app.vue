@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  var RealMQ = require('../../../../realmq-web-sdk/dist/realmq-0.0.0');
+  var RealMQ = require('@realmq/web-sdk/lib/realmq');
   var Chat = require('./chat.vue');
 
   var apiClient = new RealMQ.ApiClient(null, { baseUrl: '/' });
@@ -58,7 +58,7 @@
         })
       },
       initializeRealmq: function() {
-        this.$data.realmq = new RealMQ(this.session.token);
+        this.$data.realmq = new RealMQ(this.session.token, { autoSubscribe: true });
       }
     }
   };
