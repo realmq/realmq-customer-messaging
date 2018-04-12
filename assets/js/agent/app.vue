@@ -19,9 +19,7 @@
             There are no channels
           </p>
         </div>
-        <div class="rmq-chat">
-
-        </div>
+        <chat class="rmq-chat" :realmq="realmq" :channel="activeChannel"></chat>
       </div>
       <div class="rmq-window-footer"></div>
     </div>
@@ -29,8 +27,13 @@
 </template>
 
 <script>
+  const Chat = require('../components/chat.vue');
+
   module.exports = {
     name: 'app',
+    components: {
+      chat: Chat
+    },
     props: {
       realmq: {
         required: true
@@ -40,7 +43,8 @@
       return {
         channelList: {},
         title: 'Agent Dashboard',
-        lead: 'Manage your customer cummunications.'
+        lead: 'Manage your customer cummunications.',
+        activeChannel: null
       }
     },
     created: function() {
@@ -51,7 +55,8 @@
         var $data = this.$data;
 
         this.realmq.channels.list().then(function (channelList) {
-          $data.channelList = channelList
+          $data.channelList = channelList;
+          $data.activeChannel = channelList.count && channelList.items[0];
         });
       }
     }

@@ -22,7 +22,7 @@
     </template>
     <template v-else>
       <div class="rmq-loading">
-        Initialize Chat...
+        Connecting...
       </div>
     </template>
   </div>
@@ -44,15 +44,19 @@
       var realmq = this.realmq;
       var $data = this.$data;
 
-      if (realmq.rtm.isConnected) {
+      realmq.rtm.on('connected', function() {
         $data.isConnected = true;
-      } else {
-        realmq.rtm.connect().then(function() {
-          $data.isConnected = true;
+      });
 
-          return realmq.autoSubscribe();
-        });
-      }
+      realmq.rtm.on('disconnected', function() {
+        $data.isConnected = false;
+      });
+
+      realmq.rtm.on('reconnected', function() {
+        $data.isConnected = true;
+      });
+
+      $data.isConnected = realmq.rtm.isConnected;
     }
   }
 </script>
@@ -60,7 +64,6 @@
   @import "../../styles/variables";
 
   .rmq-chat {
-    height: 100%;
     position: relative;
     display: flex;
     flex-direction: column;

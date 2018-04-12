@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="rmq-window-body">
-          <widget-chat :realmq="realmq"></widget-chat>
+          <widget-chat class="rmq-chat" :realmq="realmq"></widget-chat>
         </div>
         <div class="rmq-window-footer"></div>
       </div>
@@ -27,7 +27,7 @@
 
 <script>
   var RealMQ = require('@realmq/web-sdk/lib/realmq');
-  var Chat = require('./chat.vue');
+  var Chat = require('../components/chat.vue');
 
   var apiClient = new RealMQ.ApiClient(null, { baseUrl: '/' });
 
@@ -83,6 +83,12 @@
 
     .rmq-window-body {
       height: 520px;
+    }
+  }
+
+  .rmq-widget {
+    .rmq-chat {
+      height: 100%;
     }
   }
 
