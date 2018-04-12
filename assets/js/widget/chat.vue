@@ -44,16 +44,20 @@
       var realmq = this.realmq;
       var $data = this.$data;
 
-      realmq.rtm.connect().then(function() {
+      if (realmq.rtm.isConnected) {
         $data.isConnected = true;
+      } else {
+        realmq.rtm.connect().then(function() {
+          $data.isConnected = true;
 
-        return realmq.autoSubscribe();
-      });
+          return realmq.autoSubscribe();
+        });
+      }
     }
   }
 </script>
 <style lang="scss" scoped>
-  @import "styles/variables";
+  @import "../../styles/variables";
 
   .rmq-chat {
     height: 100%;

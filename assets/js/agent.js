@@ -1,13 +1,13 @@
 'use strict';
 
 var Vue = require('vue');
-var RealMQ = require('../../../realmq-web-sdk/dist/realmq-0.0.0');
+var RealMQ = require('@realmq/web-sdk/lib/realmq');
 var App = require('./agent/app.vue');
 
 var VueApp = Vue.extend(App);
 var appNode = document.getElementById('app');
 
-var realmq = new RealMQ(appNode.dataset.authToken);
+var realmq = new RealMQ(appNode.dataset.authToken, {autoSubscribe: true});
 
 module.exports = new VueApp({
   el: appNode,

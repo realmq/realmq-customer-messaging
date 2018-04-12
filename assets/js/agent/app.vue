@@ -1,20 +1,30 @@
-
 <template>
-  <div id="app">
-    <img src="https://realmq.com/img/logo.svg">
-    <h1>{{ title }}</h1>
-    <p>{{ lead }}</p>
+  <div class="rmq-agent">
+    <div class="rmq-window">
+      <div class="rmq-window-nav">
+        <div class="rmq-nav-item rmq-nav-logo">
+          <img src="https://realmq.com/img/logo.svg">
+        </div>
+      </div>
+      <div class="rmq-window-body">
+        <div class="rmq-channels">
+          <h3>Channels</h3>
 
-    <h2>Channels</h2>
+          <div class="rmq-channel-list" v-if="channelList.count">
+            <div class="rmq-list-item" v-for="channel in channelList.items">
+              {{ channel.id }}
+            </div>
+          </div>
+          <p v-else>
+            There are no channels
+          </p>
+        </div>
+        <div class="rmq-chat">
 
-    <ul v-if="channelList.count">
-      <li v-for="channel in channelList.items">
-        {{ channel.id }}
-      </li>
-    </ul>
-    <p v-else>
-      There are no channels
-    </p>
+        </div>
+      </div>
+      <div class="rmq-window-footer"></div>
+    </div>
   </div>
 </template>
 
@@ -48,19 +58,38 @@
   };
 </script>
 
-<style scoped>
-  #app {
+<style lang="scss" scoped>
+  @import "../../styles/variables";
+  @import "../../styles/window";
+
+  .rmq-agent {
     font-family: 'Dosis', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
     color: #323d47;
-    margin-top: 60px;
+
+    .rmq-window {
+      height: 100%;
+    }
   }
-  h1 {
-    font-weight: normal;
+
+  .rmq-window-body {
+    display: flex;
+    flex-direction: row;
+
+    .rmq-channels {
+      width: 20%;
+      min-width: 275px;
+    }
+
+    .rmq-chat {
+      flex-grow: 1;
+      @include material-shadow(1);
+    }
   }
-  a {
-    color: #3ac955;
+
+  .rmq-channels .rmq-list-item {
+    cursor: pointer;
+    padding: 0.5rem 0;
   }
 </style>

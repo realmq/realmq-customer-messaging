@@ -1,11 +1,11 @@
 <template>
   <div class="rmq-widget">
     <transition name="rmq-fade-in">
-      <div v-if="isOpen" class="rmq-widget-window">
-        <div class="rmq-widget-nav">
+      <div v-if="isOpen" class="rmq-window">
+        <div class="rmq-window-nav">
           <div class="rmq-nav-toggle"></div>
-          <div class="rmq-main-nav-item">
-            <a class="rmq-main-nav-item-link" href="#">Alrik</a>
+          <div class="rmq-nav-item">
+            <a class="rmq-nav-item-link" href="#">Alrik</a>
           </div>
           <div class="rmq-nav-options" v-on:click="isMenuOpen = !isMenuOpen">
             <transition name="rmq-fade-in">
@@ -15,10 +15,10 @@
             </transition>
           </div>
         </div>
-        <div class="rmq-widget-body">
+        <div class="rmq-window-body">
           <widget-chat :realmq="realmq"></widget-chat>
         </div>
-        <div class="rmq-widget-footer"></div>
+        <div class="rmq-window-footer"></div>
       </div>
     </transition>
     <div :class="{'rmq-is-open': isOpen}" @click="isOpen = !isOpen" class="rqm-widget-toggle"></div>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  var RealMQ = require('../../../../realmq-web-sdk/dist/realmq-0.0.0');
+  var RealMQ = require('@realmq/web-sdk/lib/realmq');
   var Chat = require('./chat.vue');
 
   var apiClient = new RealMQ.ApiClient(null, { baseUrl: '/' });
@@ -58,14 +58,15 @@
         })
       },
       initializeRealmq: function() {
-        this.$data.realmq = new RealMQ(this.session.token);
+        this.$data.realmq = new RealMQ(this.session.token, { autoSubscribe: true });
       }
     }
   };
 </script>
 
 <style lang="scss" scoped>
-  @import "styles/variables";
+  @import "../../styles/variables";
+  @import "../../styles/window";
 
   .rmq-widget {
     position: fixed;
@@ -74,69 +75,18 @@
     font-family: $font-sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-  .rmq-widget-window {
-    display: flex;
-    flex-direction: column;
-    height: 520px;
-    width: 320px;
-    overflow: hidden;
-    background-color: white;
-    position: relative;
-    @include material-shadow(3);
 
-    .rmq-widget-body {
-      flex-grow: 1;
-      overflow: scroll;
+    .rmq-window {
       height: 520px;
-      padding: ($navHeight - ($navHeight/1.5)) / 2;
-      background: darken($white, 5%);
-
-      -ms-overflow-style: none;
-      overflow: -moz-scrollbars-none;
-
-      &::-webkit-scrollbar {
-        width: 0 !important
-      }
+      width: 320px;
     }
 
-    transition: $trans;
+    .rmq-window-body {
+      height: 520px;
+    }
   }
 
-  .rmq-widget-nav {
-    height: $navHeight;
-    z-index: $nav;
-    background-color: $primary;
-    border-bottom: 3px solid darken($primary, 10%);;
-    color: $white;
-
-    @include material-shadow(1);
-
-    .rmq-nav-toggle {
-      height: 32px;
-      width: 32px;
-      background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjQ4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSI0OCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMjAgMTFINy44M2w1LjU5LTUuNTlMMTIgNGwtOCA4IDggOCAxLjQxLTEuNDFMNy44MyAxM0gyMHYtMnoiLz48L3N2Zz4=);
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: $navHeight/2.5;
-      margin: 16px;
-      float: left;
-      cursor: pointer;
-    }
-
-    .rmq-nav-options {
-      height: 32px;
-      width: 32px;
-      background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjQ4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSI0OCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMTIgOGMxLjEgMCAyLS45IDItMnMtLjktMi0yLTItMiAuOS0yIDIgLjkgMiAyIDJ6bTAgMmMtMS4xIDAtMiAuOS0yIDJzLjkgMiAyIDIgMi0uOSAyLTItLjktMi0yLTJ6bTAgNmMtMS4xIDAtMiAuOS0yIDJzLjkgMiAyIDIgMi0uOSAyLTItLjktMi0yLTJ6Ii8+PC9zdmc+);
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: $navHeight/2.5;
-      margin: 16px;
-      position: absolute;
-      right: 0;
-      cursor: pointer;
-    }
-
+  .rmq-window-nav {
     .rmq-widget-menu {
       background: $white;
       position: absolute;
@@ -150,34 +100,6 @@
         display: inline-block;
       }
     }
-
-    .rmq-main-nav-item {
-      float: left;
-      height: $navHeight;
-      margin-right: 50px;
-      position: relative;
-
-      // text-align: center;
-      line-height: $navHeight;
-
-      .rmq-main-nav-item-link {
-        display: block;
-        position: relative;
-        height: $navHeight;
-        width: 100%;
-
-        text-align: center;
-        line-height: $navHeight;
-        text-decoration: none;
-        color: inherit;
-
-        transition: $trans;
-      }
-
-      transition: $trans;
-    }
-
-    transition: $trans;
   }
 
   .rqm-widget-toggle {
@@ -212,15 +134,16 @@
     .rmq-widget {
       bottom: 1rem;
       right: 1rem;
-    }
-    .rmq-widget-window {
-      position: fixed;
-      width: 100%;
-      height: auto;
-      top: 0;
-      left: 0;
-      bottom: 5rem;
-      transform: translateX(0);
+
+      .rqm-window {
+        position: fixed;
+        width: 100%;
+        height: auto;
+        top: 0;
+        left: 0;
+        bottom: 5rem;
+        transform: translateX(0);
+      }
     }
   }
 </style>

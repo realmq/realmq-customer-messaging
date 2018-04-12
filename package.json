@@ -61,6 +61,7 @@
   },
   "dependencies": {
     "@realmq/node-sdk": "git+ssh://git@gitlab.com/realmq/realmq-node-sdk.git",
+    "@realmq/web-sdk": "../realmq-web-sdk",
     "chalk": "^2.3.2",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
