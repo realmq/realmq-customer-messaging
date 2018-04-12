@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="rmq-window-body">
-          <widget-chat class="rmq-chat" :realmq="realmq"></widget-chat>
+          <widget-chat class="rmq-chat" :realmq="realmq" :channel="session.channel" :user-id="session.userId"></widget-chat>
         </div>
         <div class="rmq-window-footer"></div>
       </div>
@@ -82,7 +82,7 @@
     }
 
     .rmq-window-body {
-      height: 520px;
+      height: 432px;
     }
   }
 

@@ -2,18 +2,16 @@
   <div class="rmq-chat">
     <template v-if="realmq && isConnected">
       <div class="rmq-messages">
-        <div class="rmq-message rmq-is-them">
-          <div class="rmq-message-sender"></div>
-          <div class="rmq-message-body">Howdy!</div>
-        </div>
-        <div class="rmq-message rmq-is-them">
-          <div class="rmq-message-sender"></div>
-          <div class="rmq-message-body">How can we support you?</div>
-        </div>
-        <div class="rmq-message rmq-is-me">
-          <div class="rmq-message-sender"></div>
-          <div class="rmq-message-body rmq-is-animated rmq-is-fadeIn">Can I install RealMQ on my own hardware?</div>
-        </div>
+        <template v-for="message in messages">
+          <div class="rmq-message" :class="{'rmq-is-me': isMyMessage(message), 'rmq-is-them': !isMyMessage(message)}">
+            <div class="rmq-message-sender"></div>
+            <div class="rmq-message-body">
+              <div v-for="part in message.content" v-if="part.text">
+                {{part.text}}
+              </div>
+            </div>
+          </div>
+        </template>
       </div>
       <div class="rmq-chat-input">
         <textarea class="rmq-message-input"></textarea>
@@ -33,16 +31,24 @@
     props: {
       realmq: {
         required: true,
+      },
+      channel: {
+        required: true
+      },
+      userId: {
+        required: true
       }
     },
     data: function() {
       return {
         isConnected: false,
+        messages: []
       };
     },
     created: function() {
       var realmq = this.realmq;
       var $data = this.$data;
+      var me = this;
 
       realmq.rtm.on('connected', function() {
         $data.isConnected = true;
@@ -56,7 +62,26 @@
         $data.isConnected = true;
       });
 
+      realmq.rtm.on(this.channel + '/message', function(message) {
+        if (message.error) {
+          console.warn('Failed to parse message', message.error);
+          return;
+        }
+
+        me.onMessage(message.channel, message.data);
+      });
+
       $data.isConnected = realmq.rtm.isConnected;
+    },
+
+    methods: {
+      onMessage: function(channel, message) {
+        this.messages.push(message);
+      },
+
+      isMyMessage: function(message) {
+        return message.from.userId === this.userId;
+      }
     }
   }
 </script>

@@ -19,7 +19,7 @@
             There are no channels
           </p>
         </div>
-        <chat class="rmq-chat" :realmq="realmq" :channel="activeChannel"></chat>
+        <chat class="rmq-chat" :realmq="realmq" :channel="activeChannel && activeChannel.id" :user-id="userId"></chat>
       </div>
       <div class="rmq-window-footer"></div>
     </div>
@@ -44,10 +44,12 @@
         channelList: {},
         title: 'Agent Dashboard',
         lead: 'Manage your customer cummunications.',
-        activeChannel: null
+        activeChannel: null,
+        userId: null
       }
     },
     created: function() {
+      this.loadUser();
       this.loadChannels();
     },
     methods: {
@@ -57,6 +59,14 @@
         this.realmq.channels.list().then(function (channelList) {
           $data.channelList = channelList;
           $data.activeChannel = channelList.count && channelList.items[0];
+        });
+      },
+
+      loadUser: function() {
+        var $data = this.$data;
+
+        this.realmq.me.user.retrieve().then(function(user) {
+          $data.userId = user.id;
         });
       }
     }
