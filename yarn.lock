@@ -23,17 +23,19 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@realmq/node-sdk@git+ssh://git@gitlab.com/realmq/realmq-node-sdk.git":
-  version "0.0.0"
-  resolved "git+ssh://git@gitlab.com/realmq/realmq-node-sdk.git#5f9af08bd526d74978c1626bbcc0bc4fbc9cba08"
+"@realmq/node-sdk@^0.1.0-alpha1":
+  version "0.1.0-alpha1"
+  resolved "https://registry.yarnpkg.com/@realmq/node-sdk/-/node-sdk-0.1.0-alpha1.tgz#1d78be619d4f2b81379b9104604f380e3b2043e9"
   dependencies:
     mqtt "^2.17.0"
     request "^2.85.0"
 
-"@realmq/web-sdk@../realmq-web-sdk":
-  version "0.0.0"
+"@realmq/web-sdk@^0.1.0-alpha3":
+  version "0.1.0-alpha3"
+  resolved "https://registry.yarnpkg.com/@realmq/web-sdk/-/web-sdk-0.1.0-alpha3.tgz#f06fc69c5784e620b3b8c82b91f2fc22a8578a9b"
   dependencies:
     paho-mqtt "^1.0.4"
+    promise "^8.0.1"
 
 "@types/babel-types@*", "@types/babel-types@^7.0.0":
   version "7.0.1"
@@ -4682,6 +4684,12 @@ progress@^2.0.0:
 promise@^7.0.1:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/promise/-/promise-7.3.1.tgz#064b72602b18f90f29192b8b1bc418ffd1ebd3bf"
+  dependencies:
+    asap "~2.0.3"
+
+promise@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/promise/-/promise-8.0.1.tgz#e45d68b00a17647b6da711bf85ed6ed47208f450"
   dependencies:
     asap "~2.0.3"
 

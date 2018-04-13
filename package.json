@@ -60,8 +60,8 @@
     "xo": "^0.20.3"
   },
   "dependencies": {
-    "@realmq/node-sdk": "git+ssh://git@gitlab.com/realmq/realmq-node-sdk.git",
-    "@realmq/web-sdk": "../realmq-web-sdk",
+    "@realmq/node-sdk": "^0.1.0-alpha1",
+    "@realmq/web-sdk": "^0.1.0-alpha3",
     "chalk": "^2.3.2",
     "connect-session-sequelize": "^5.2.1",
     "dotenv": "^5.0.1",
