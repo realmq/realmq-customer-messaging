@@ -11,15 +11,19 @@
           <h3>Channels</h3>
 
           <div class="rmq-channel-list" v-if="channelList.count">
-            <div class="rmq-list-item" v-for="channel in channelList.items">
-              {{ channel.id }}
-            </div>
+            <template v-for="channel in channelList.items">
+              <div class="rmq-list-item" :class="{'rmq-is-active': activeChat.channel === channel.id}" @click="activateChannel(channel)">
+                {{ channel.id }}
+              </div>
+            </template>
           </div>
           <p v-else>
             There are no channels
           </p>
         </div>
-        <chat class="rmq-chat" :realmq="realmq" :channel="activeChannel && activeChannel.id" :user-id="userId"></chat>
+        <template v-for="chat in chats">
+          <chat v-show="chat.active" class="rmq-chat" :realmq="realmq" :channel="chat.channel" :user-id="userId"></chat>
+        </template>
       </div>
       <div class="rmq-window-footer"></div>
     </div>
@@ -42,9 +46,8 @@
     data: function() {
       return {
         channelList: {},
-        title: 'Agent Dashboard',
-        lead: 'Manage your customer cummunications.',
-        activeChannel: null,
+        chats: {},
+        activeChat: null,
         userId: null
       }
     },
@@ -55,10 +58,11 @@
     methods: {
       loadChannels: function() {
         var $data = this.$data;
+        var me = this;
 
         this.realmq.channels.list().then(function (channelList) {
           $data.channelList = channelList;
-          $data.activeChannel = channelList.count && channelList.items[0];
+          me.activateChannel(channelList.count && channelList.items[0]);
         });
       },
 
@@ -68,6 +72,24 @@
         this.realmq.me.user.retrieve().then(function(user) {
           $data.userId = user.id;
         });
+      },
+
+      activateChannel: function(channel) {
+        var chats = this.$data.chats;
+        var chatId = channel.id;
+
+        if (!chats[chatId]) {
+          chats[chatId] = {
+            channel: channel.id,
+          };
+        }
+
+        if (this.activeChat) {
+          this.activeChat.active = false;
+        }
+
+        chats[chatId].active = true;
+        this.$data.activeChat = chats[chatId];
       }
     }
   };
@@ -107,5 +129,9 @@
   .rmq-channels .rmq-list-item {
     cursor: pointer;
     padding: 0.5rem 0;
+
+    &.rmq-is-active {
+      color: $primary;
+    }
   }
 </style>
