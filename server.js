@@ -3,6 +3,7 @@
 const path = require('path');
 const basicAuth = require('express-basic-auth');
 const chalk = require('chalk');
+const expressSession = require('express-session');
 const express = require('express');
 const logger = require('morgan');
 const RealMQ = require('@realmq/node-sdk');
@@ -25,6 +26,20 @@ try {
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'pug');
 
+  // Create session handler for /session route
+  app.use(
+    expressSession({
+      name: 'realmq-customer-messaging',
+      proxy: true,
+      resave: false,
+      saveUninitialized: false,
+      secret: 'realmq-customer-messaging-secret',
+      cookie: {
+        path: '/session',
+      },
+    })
+  );
+
   app.use(logger('dev'));
   app.use(express.static('public'));
 
@@ -34,10 +49,10 @@ try {
 
   app.listen(app.get('port'), () => {
     console.log(
-      '%s App is running at http://localhost:%d in %s mode',
       chalk.green('✓'),
-      app.get('port'),
-      app.get('env')
+      'App is running at',
+      `http://localhost:${app.get('port')}`,
+      `in ${app.get('env')} mode`
     );
     console.log('  Press CTRL-C to stop\n');
   });

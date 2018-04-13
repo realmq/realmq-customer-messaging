@@ -66,8 +66,10 @@
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "express-basic-auth": "^1.1.4",
+    "express-session": "^1.15.6",
     "morgan": "^1.9.0",
     "pug": "^2.0.3",
+    "uuid": "^3.2.1",
     "vue": "^2.5.16"
   },
   "browserify": {
