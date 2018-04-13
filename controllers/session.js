@@ -38,9 +38,7 @@ async function fetchCustomerSession({
     description: 'Customer session token',
   });
 
-  sessionStorage.customer.token = token;
-
-  return sessionStorage.customer;
+  return Object.assign({token}, sessionStorage.customer);
 }
 
 /**
