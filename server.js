@@ -50,14 +50,16 @@ try {
   // Create session handler for /session route
   app.use(
     expressSession({
-      name: 'realmq-customer-messaging-customer',
+      name: config.session.customerSessionSecret,
       proxy: true,
       resave: false,
       saveUninitialized: false,
       store: initSessionStorage(config.db),
-      secret: 'realmq-customer-messaging-secret',
+      secret: config.session.customerSessionSecret,
       cookie: {
         path: '/session',
+        httpOnly: true,
+        maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
       },
     })
   );

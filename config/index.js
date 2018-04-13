@@ -15,7 +15,7 @@ module.exports = {
     name: env.DB_NAME,
     user: env.DB_USER,
     pass: env.DB_PASS,
-    sslEnabled: Boolean(env.ENABLE_SSL),
+    sslEnabled: env.DB_USE_SSL === 'true',
   },
 
   agent: {
@@ -25,5 +25,11 @@ module.exports = {
 
   realmq: {
     token: env.REALMQ_TOKEN,
+  },
+
+  session: {
+    customerSessionSecret: env.SESSION_CUSTOMER_SECRET || 'none',
+    customerSessionName:
+      env.SESSION_CUSTOMER_NAME || 'realmq-customer-messaging-customer-session',
   },
 };
