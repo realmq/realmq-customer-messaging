@@ -1,9 +1,11 @@
 'use strict';
 
-const {customer} = require('../config');
+const {customer, agent} = require('../config');
 
 const sessionCache = new Map();
 const subscriptionCache = new Map();
+const agentSubscriptionCache = new Map();
+const {toAgentUserName} = require('../lib/agent');
 
 async function fetchCustomerSession({
   cache,
@@ -61,6 +63,37 @@ async function fetchCustomerSubscription({
   return cache.get(customerId);
 }
 
+async function ensureAgentSubscription({
+  cache,
+  agentId,
+  channelId,
+  subscriptionResource: {retrieve, create},
+}) {
+  const subscriptionKey = `${agentId}-${channelId}`;
+  if (!cache.has(subscriptionKey)) {
+    try {
+      cache.set(subscriptionKey, await retrieve(subscriptionKey));
+    } catch (err) {
+      if (err.code !== 'RESOURCE_NOT_FOUND') {
+        throw err;
+      }
+
+      cache.set(
+        subscriptionKey,
+        await create({
+          id: subscriptionKey,
+          channelId,
+          userId: agentId,
+          allowWrite: true,
+          allowRead: true,
+        })
+      );
+    }
+  }
+
+  return cache.get(subscriptionKey);
+}
+
 module.exports = {
   async retrieve(req, res) {
     const {realmq} = req.app.locals;
@@ -75,6 +108,14 @@ module.exports = {
     const subscription = await fetchCustomerSubscription({
       cache: subscriptionCache,
       customerId,
+      subscriptionResource: realmq.subscriptions,
+    });
+
+    // Run in background
+    ensureAgentSubscription({
+      cache: agentSubscriptionCache,
+      agentId: toAgentUserName(agent.username),
+      channelId: customerId,
       subscriptionResource: realmq.subscriptions,
     });
 
