@@ -14,7 +14,8 @@
     "test": "echo 'No tests, yet' && exit 1",
     "build-agent": "mkdir -p public/js && browserify assets/js/agent.js > public/js/agent.js",
     "build-widget": "mkdir -p public/js && browserify assets/js/widget.js > public/js/widget.js",
-    "dist": "export NODE_ENV=production; for p in agent widget; do yarn build-${p} && uglifyjs public/js/${p}.js -o public/js/${p}.min.js; done"
+    "dist": "export NODE_ENV=production; for p in agent widget; do yarn build-${p} && uglifyjs public/js/${p}.js -o public/js/${p}.min.js; done",
+    "postinstall": "yarn dist"
   },
   "main": "server.js",
   "engines": {
