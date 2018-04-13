@@ -3,10 +3,32 @@
 const path = require('path');
 const basicAuth = require('express-basic-auth');
 const chalk = require('chalk');
+const expressSession = require('express-session');
 const express = require('express');
+const Sequelize = require('sequelize');
+const SequelizeStore = require('connect-session-sequelize')(
+  expressSession.Store
+);
 const logger = require('morgan');
 const RealMQ = require('@realmq/node-sdk');
 const asyncRoute = require('./lib/async-route');
+
+function initSessionStorage(dbConfig) {
+  // Init Sequelize
+  const sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.pass, {
+    host: dbConfig.host,
+    port: dbConfig.port,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: dbConfig.sslEnabled,
+    },
+    logging: false,
+  });
+  const sequelizeSessionStore = new SequelizeStore({db: sequelize});
+  sequelizeSessionStore.sync();
+
+  return sequelizeSessionStore;
+}
 
 try {
   const config = require('./config');
@@ -25,6 +47,23 @@ try {
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'pug');
 
+  // Create session handler for /session route
+  app.use(
+    expressSession({
+      name: config.session.customerSessionSecret,
+      proxy: true,
+      resave: false,
+      saveUninitialized: false,
+      store: initSessionStorage(config.db),
+      secret: config.session.customerSessionSecret,
+      cookie: {
+        path: '/session',
+        httpOnly: true,
+        maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
+      },
+    })
+  );
+
   app.use(logger('dev'));
   app.use(express.static('public'));
 
@@ -34,10 +73,10 @@ try {
 
   app.listen(app.get('port'), () => {
     console.log(
-      '%s App is running at http://localhost:%d in %s mode',
       chalk.green('✓'),
-      app.get('port'),
-      app.get('env')
+      'App is running at',
+      `http://localhost:${app.get('port')}`,
+      `in ${app.get('env')} mode`
     );
     console.log('  Press CTRL-C to stop\n');
   });
