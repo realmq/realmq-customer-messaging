@@ -12,9 +12,8 @@ const SequelizeStore = require('connect-session-sequelize')(
 const logger = require('morgan');
 const RealMQ = require('@realmq/node-sdk');
 const asyncRoute = require('./lib/async-route');
-const {db: dbConfig} = require('./config');
 
-function initSessionStorage() {
+function initSessionStorage(dbConfig) {
   // Init Sequelize
   const sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.pass, {
     host: dbConfig.host,
@@ -55,7 +54,7 @@ try {
       proxy: true,
       resave: false,
       saveUninitialized: false,
-      store: initSessionStorage(),
+      store: initSessionStorage(config.db),
       secret: 'realmq-customer-messaging-secret',
       cookie: {
         path: '/session',
