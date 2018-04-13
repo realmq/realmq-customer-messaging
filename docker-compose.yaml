@@ -6,8 +6,8 @@ services:
       - 8889:8889
     environment:
       - PORT=8889
-      - AGENT_USERNAME=lars
-      - AGENT_PASSWORD=lars
+      - AGENT_USERNAME=james
+      - AGENT_PASSWORD=bond
       - REALMQ_TOKEN=1kZ6ZidA581JUwLDOn7/u2Yj+O6KYh6JeqQW5RzkgFWqMABK8nXEZlyBcj+KT1vZLXy+dQMdthWzDiMHr1GB0Q==
       - DB_HOST=postgresql
       - DB_PORT=5432
