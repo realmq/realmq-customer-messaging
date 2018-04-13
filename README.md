@@ -33,3 +33,9 @@ $ cp .env.tpl .env
 | `AGENT_PASSWORD` | Password of the agent user | **password** |
 
 
+---
+
+### LICENSE
+
+The files in this archive are released under MIT license.
+You can find a copy of this license in [LICENSE](LICENSE).
