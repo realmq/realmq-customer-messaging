@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  const Chat = require('../components/chat.vue');
+  var Chat = require('../components/chat.vue');
 
   module.exports = {
     name: 'app',
