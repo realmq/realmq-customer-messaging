@@ -1,0 +1,29 @@
+version: "3"
+services:
+  backend:
+    image: node:onbuild
+    ports:
+      - 8889:8889
+    environment:
+      - PORT=8889
+      - AGENT_USERNAME=lars
+      - AGENT_PASSWORD=lars
+      - REALMQ_TOKEN=1kZ6ZidA581JUwLDOn7/u2Yj+O6KYh6JeqQW5RzkgFWqMABK8nXEZlyBcj+KT1vZLXy+dQMdthWzDiMHr1GB0Q==
+      - DB_HOST=postgresql
+      - DB_PORT=5432
+      - DB_NAME=realmq
+      - DB_USER=postgres
+      - DB_PASS=realmq
+    volumes:
+      - .:/usr/src/app
+    links:
+      - postgresql:postgresql
+  postgresql:
+    image: bitnami/postgresql
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRESQL_DATABASE=realmq
+      - POSTGRESQL_PASSWORD=realmq
+    volumes:
+      - ./.db:/bitnami/postgresql

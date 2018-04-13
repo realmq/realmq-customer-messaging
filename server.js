@@ -5,9 +5,31 @@ const basicAuth = require('express-basic-auth');
 const chalk = require('chalk');
 const expressSession = require('express-session');
 const express = require('express');
+const Sequelize = require('sequelize');
+const SequelizeStore = require('connect-session-sequelize')(
+  expressSession.Store
+);
 const logger = require('morgan');
 const RealMQ = require('@realmq/node-sdk');
 const asyncRoute = require('./lib/async-route');
+const {db: dbConfig} = require('./config');
+
+function initSessionStorage() {
+  // Init Sequelize
+  const sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.pass, {
+    host: dbConfig.host,
+    port: dbConfig.port,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: dbConfig.sslEnabled,
+    },
+    logging: false,
+  });
+  const sequelizeSessionStore = new SequelizeStore({db: sequelize});
+  sequelizeSessionStore.sync();
+
+  return sequelizeSessionStore;
+}
 
 try {
   const config = require('./config');
@@ -29,10 +51,11 @@ try {
   // Create session handler for /session route
   app.use(
     expressSession({
-      name: 'realmq-customer-messaging',
+      name: 'realmq-customer-messaging-customer',
       proxy: true,
       resave: false,
       saveUninitialized: false,
+      store: initSessionStorage(),
       secret: 'realmq-customer-messaging-secret',
       cookie: {
         path: '/session',
