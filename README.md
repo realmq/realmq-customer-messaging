@@ -1,7 +1,20 @@
 # RealMQ Customer Messaging
 
-An intercom-like customer messaging reference implementation on top of RealMQ's
-instant messaging backbone.
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
+A customer messaging reference implementation on top of RealMQ's instant messaging backbone.
+
+See [Live Demo](https://customer-messaging-example.herokuapp.com/)
+
+## About
+
+[RealMQ](https://realmq.com) is a highly scalable, privacy compliant real-time communication backbone.
+Our focus is to deliver great service with best possible integrability while you keep full control over your data.
+
+## Contact
+
+Get in touch with us to get an RealMQ account set up.
+You can do that by sending an email to service@realmq.com.
 
 ## Getting started
 
@@ -9,6 +22,12 @@ First install dependencies:
 
 ```bash
 $ yarn
+```
+
+Build the vue apps (agent & chat-widget)
+
+```bash
+$ yarn dist
 ```
 
 Start the express app
@@ -31,7 +50,6 @@ $ cp .env.tpl .env
 | `PORT` | http port the server will listen to | **8080** |
 | `AGENT_USERNAME` | Username required to access `/agent` | **agent** |
 | `AGENT_PASSWORD` | Password of the agent user | **password** |
-
 
 ---
 
