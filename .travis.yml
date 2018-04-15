@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+  - "8"
+cache: yarn
+git:
+  depth: 1
+script:
+  - yarn lint
+  - yarn dist
+jobs:
+  include:
+  - stage: deploy
+    if: tag IS present
+    node_js: "8"
+    script:
+      - echo "Deploy to heroku"
+      - yarn dist
+    deploy:
+      skip_cleanup: true
+      provider: heroku
+      api_key: $HEROKU_API_KEY
+      app: customer-messaging-example
+      on:
+        tags: true
