@@ -131,6 +131,10 @@
     flex-grow: 1;
     overflow-y: auto;
     overflow-x: hidden;
+    position: relative;
+
+    width: 100%;
+    margin: 1rem 0;
   }
 
   .rmq-chat-input {
@@ -184,14 +188,6 @@
 
       cursor: pointer;
     }
-  }
-
-  .rmq-messages {
-    position: relative;
-    overflow: hidden;
-
-    width: 100%;
-    margin: 1rem 0;
   }
 
   .rmq-message-body {
