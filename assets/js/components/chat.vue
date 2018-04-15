@@ -148,6 +148,7 @@
       padding-top: ($navHeight/2) - 8;
       font-weight: 300;
       font-family: $font-sans-serif;
+      font-size: 16px;
 
       &:focus {
         outline: none;
