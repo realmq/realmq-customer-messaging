@@ -1,6 +1,8 @@
 # RealMQ Customer Messaging
 
+[![Build Status](https://img.shields.io/travis/RealMQ/realmq-customer-messaging/master.svg?style=flat-square)](https://travis-ci.org/RealMQ/realmq-customer-messaging)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![MIT license](https://img.shields.io/github/license/realmq/realmq-customer-messaging.svg?style=flat-square)](LICENSE)
 
 A customer messaging reference implementation on top of RealMQ's instant messaging backbone.
 
