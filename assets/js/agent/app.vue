@@ -58,9 +58,6 @@
       this.loadChannels();
     },
     methods: {
-      test: function () {
-        return 'asdf';
-      },
       loadChannels: function() {
         var $data = this.$data;
         var me = this;
