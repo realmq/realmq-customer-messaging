@@ -1,32 +1,40 @@
 'use strict';
 
 const uuid = require('uuid');
+const Moniker = require('moniker');
 const {agent} = require('../config');
 
 const agentSubscriptionCache = new Map();
 const {toAgentUserName} = require('../lib/agent');
 
+const generateChannelName = () => {
+  return Moniker.generator([Moniker.adjective, Moniker.noun]).choose();
+};
+
 /**
  * Tries to fetch customer session from session storage and creates a new one if none exists
  *
- * @param {Object} sessionStorage
+ * @param {Object} sessionContainer
  * @param {Function} createToken
+ * @param {Object} channelResource
  * @param {Object} subscriptionResource
  * @return {Promise.<{userId: string, channel: string, token : string}>}
  */
 async function fetchCustomerSession({
-  sessionStorage,
+  sessionContainer,
   tokenResource: {create: createToken},
+  channelResource,
   subscriptionResource,
 }) {
-  if (!sessionStorage.customer) {
+  if (!sessionContainer.customer) {
     const userId = uuid.v4();
     const {channelId} = await fetchCustomerSubscription({
       userId,
+      channelResource,
       subscriptionResource,
     });
 
-    sessionStorage.customer = {
+    sessionContainer.customer = {
       userId,
       channel: channelId,
     };
@@ -34,11 +42,11 @@ async function fetchCustomerSession({
 
   // Always create new token
   const {token} = await createToken({
-    userId: sessionStorage.customer.userId,
+    userId: sessionContainer.customer.userId,
     description: 'Customer session token',
   });
 
-  return {...sessionStorage.customer, token};
+  return {...sessionContainer.customer, token};
 }
 
 /**
@@ -47,6 +55,7 @@ async function fetchCustomerSession({
  * @param {string} userId
  * @param {Function} retrieveSubscription
  * @param {Function} createSubscription
+ * @param {Function} createChannel
  * @return {Promise.<{channelId: string}>}
  */
 async function fetchCustomerSubscription({
@@ -55,6 +64,7 @@ async function fetchCustomerSubscription({
     retrieve: retrieveSubscription,
     create: createSubscription,
   },
+  channelResource: {create: createChannel},
 }) {
   const subscriptionId = `subscription-${userId}`;
   const channelId = `customer-channel-${userId}`;
@@ -67,9 +77,16 @@ async function fetchCustomerSubscription({
       throw err;
     }
 
+    const channel = await createChannel({
+      id: channelId,
+      properties: {
+        name: generateChannelName(),
+      },
+    });
+
     subscription = await createSubscription({
       id: subscriptionId,
-      channelId,
+      channelId: channel.id,
       userId,
       allowWrite: true,
       allowRead: true,
@@ -131,8 +148,9 @@ module.exports = {
     const {realmq} = req.app.locals;
 
     const {userId, token, channel} = await fetchCustomerSession({
-      sessionStorage: req.session,
+      sessionContainer: req.session,
       tokenResource: realmq.tokens,
+      channelResource: realmq.channels,
       subscriptionResource: realmq.subscriptions,
     });
 

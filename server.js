@@ -13,7 +13,7 @@ const logger = require('morgan');
 const RealMQ = require('@realmq/node-sdk');
 const asyncRoute = require('./lib/async-route');
 
-function initSessionStorage(dbConfig) {
+const initSessionStorage = dbConfig => {
   // Init Sequelize
   const sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.pass, {
     host: dbConfig.host,
@@ -28,7 +28,7 @@ function initSessionStorage(dbConfig) {
   sequelizeSessionStore.sync();
 
   return sequelizeSessionStore;
-}
+};
 
 try {
   const config = require('./config');

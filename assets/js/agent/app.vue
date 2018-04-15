@@ -13,7 +13,7 @@
           <div class="rmq-channel-list" v-if="channelList.count">
             <template v-for="channel in channelList.items">
               <div class="rmq-list-item" :class="{'rmq-is-active': activeChat.channel === channel.id}" @click="activateChannel(channel)">
-                {{ channel.id }}
+                {{ (channel.properties || {}).name || channel.id }}<br>
               </div>
             </template>
           </div>
