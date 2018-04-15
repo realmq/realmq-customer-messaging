@@ -4,11 +4,13 @@ node_js:
 cache: yarn
 git:
   depth: 1
-script:
-  - yarn lint
-  - yarn dist
+
 jobs:
   include:
+  - stage: test
+    script:
+      - yarn lint
+      - yarn dist
   - stage: deploy
     if: tag IS present
     node_js: "8"
