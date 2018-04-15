@@ -14,6 +14,7 @@
             <template v-for="channel in channelList.items">
               <div class="rmq-list-item" :class="{'rmq-is-active': activeChat.channel === channel.id}" @click="activateChannel(channel)">
                 {{ (channel.properties || {}).name || channel.id }}<br>
+                {{ channel.createdAt }}
               </div>
             </template>
           </div>
@@ -61,6 +62,9 @@
         var me = this;
 
         this.realmq.channels.list().then(function (channelList) {
+          channelList.items.sort((a, b) => {
+            return new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1;
+          });
           $data.channelList = channelList;
           me.activateChannel(channelList.count && channelList.items[0]);
         });
@@ -126,12 +130,16 @@
     }
   }
 
-  .rmq-channels .rmq-list-item {
-    cursor: pointer;
-    padding: 0.5rem 0;
+  .rmq-channels {
+    overflow: auto;
 
-    &.rmq-is-active {
-      color: $primary;
+    .rmq-list-item {
+      cursor: pointer;
+      padding: 0.5rem 0;
+
+      &.rmq-is-active {
+        color: $primary;
+      }
     }
   }
 </style>
