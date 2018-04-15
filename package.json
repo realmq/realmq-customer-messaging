@@ -69,6 +69,7 @@
     "express": "^4.16.3",
     "express-basic-auth": "^1.1.4",
     "express-session": "^1.15.6",
+    "moment": "^2.22.1",
     "moniker": "^0.1.2",
     "morgan": "^1.9.0",
     "pg": "^7.4.1",

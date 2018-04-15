@@ -13,8 +13,8 @@
           <div class="rmq-channel-list" v-if="channelList.count">
             <template v-for="channel in channelList.items">
               <div class="rmq-list-item" :class="{'rmq-is-active': activeChat.channel === channel.id}" @click="activateChannel(channel)">
-                {{ (channel.properties || {}).name || channel.id }}<br>
-                {{ channel.createdAt }}
+                {{ channel.name }}<br>
+                <small>{{ channel.dateFormatted }}</small>
               </div>
             </template>
           </div>
@@ -33,6 +33,7 @@
 
 <script>
   var Chat = require('../components/chat.vue');
+  var moment = require('moment');
 
   module.exports = {
     name: 'app',
@@ -57,6 +58,9 @@
       this.loadChannels();
     },
     methods: {
+      test: function () {
+        return 'asdf';
+      },
       loadChannels: function() {
         var $data = this.$data;
         var me = this;
@@ -64,6 +68,12 @@
         this.realmq.channels.list().then(function (channelList) {
           channelList.items.sort(function (a, b) {
             return new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1;
+          }).map(function(channel) {
+            channel.name = (channel.properties || {}).name || channel.id;
+            channel.name = channel.name.length > 30
+              ? channel.name.substr(0, 20) + '...'
+              : channel.name;
+            channel.dateFormatted = moment(channel.createdAt).format('LLL');
           });
           $data.channelList = channelList;
           me.activateChannel(channelList.count && channelList.items[0]);
@@ -135,7 +145,10 @@
 
     .rmq-list-item {
       cursor: pointer;
-      padding: 0.5rem 0;
+      background: white;
+      padding: 0.5rem;
+      margin: 0 0.5rem 0.5rem 0;
+
 
       &.rmq-is-active {
         color: $primary;
