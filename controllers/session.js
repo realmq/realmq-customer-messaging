@@ -18,7 +18,7 @@ const generateChannelName = () => {
  * @param {Function} createToken
  * @param {Object} channelResource
  * @param {Object} subscriptionResource
- * @return {Promise.<{userId: string, channel: string, token : string}>}
+ * @return {Promise.<{userId: string, channelId: string, token: string, channelName: string}>}
  */
 async function fetchCustomerSession({
   sessionContainer,
@@ -26,27 +26,28 @@ async function fetchCustomerSession({
   channelResource,
   subscriptionResource,
 }) {
-  if (!sessionContainer.customer) {
+  if (!sessionContainer.customerSession) {
     const userId = uuid.v4();
-    const {channelId} = await fetchCustomerSubscription({
+    const {channelId, channelName} = await fetchCustomerSubscription({
       userId,
       channelResource,
       subscriptionResource,
     });
 
-    sessionContainer.customer = {
+    sessionContainer.customerSession = {
       userId,
-      channel: channelId,
+      channelId,
+      channelName,
     };
   }
 
   // Always create new token
   const {token} = await createToken({
-    userId: sessionContainer.customer.userId,
+    userId: sessionContainer.customerSession.userId,
     description: 'Customer session token',
   });
 
-  return {...sessionContainer.customer, token};
+  return {...sessionContainer.customerSession, token};
 }
 
 /**
@@ -55,8 +56,9 @@ async function fetchCustomerSession({
  * @param {string} userId
  * @param {Function} retrieveSubscription
  * @param {Function} createSubscription
+ * @param {Function} retrieveChannel
  * @param {Function} createChannel
- * @return {Promise.<{channelId: string}>}
+ * @return {Promise.<{channelId: string, channelName: string}>}
  */
 async function fetchCustomerSubscription({
   userId,
@@ -64,20 +66,22 @@ async function fetchCustomerSubscription({
     retrieve: retrieveSubscription,
     create: createSubscription,
   },
-  channelResource: {create: createChannel},
+  channelResource: {retrieve: retrieveChannel, create: createChannel},
 }) {
   const subscriptionId = `subscription-${userId}`;
   const channelId = `customer-channel-${userId}`;
   let subscription;
+  let channel;
 
   try {
     subscription = await retrieveSubscription(subscriptionId);
+    channel = await retrieveChannel(channelId);
   } catch (err) {
     if (err.code !== 'RESOURCE_NOT_FOUND') {
       throw err;
     }
 
-    const channel = await createChannel({
+    channel = await createChannel({
       id: channelId,
       properties: {
         name: generateChannelName(),
@@ -93,7 +97,13 @@ async function fetchCustomerSubscription({
     });
   }
 
-  return subscription;
+  return {
+    channelId: subscription.channelId,
+    channelName:
+      channel.properties && channel.properties.name
+        ? channel.properties.name
+        : 'anonymous',
+  };
 }
 
 /**
@@ -147,25 +157,28 @@ module.exports = {
   async retrieve(req, res) {
     const {realmq} = req.app.locals;
 
-    const {userId, token, channel} = await fetchCustomerSession({
+    const {userId, token, channelId, channelName} = await fetchCustomerSession({
       sessionContainer: req.session,
       tokenResource: realmq.tokens,
       channelResource: realmq.channels,
       subscriptionResource: realmq.subscriptions,
     });
 
+    console.log({userId, token, channelId, channelName});
+
     // Run in background
     ensureAgentSubscription({
       subscriptionCache: agentSubscriptionCache,
       agentId: toAgentUserName(agent.username),
-      channelId: channel,
+      channelId,
       subscriptionResource: realmq.subscriptions,
     });
 
     res.json({
       userId,
       token,
-      channel,
+      channelId,
+      channelName,
     });
   },
 };

@@ -5,7 +5,7 @@
         <div class="rmq-window-nav">
           <div class="rmq-nav-toggle"></div>
           <div class="rmq-nav-item">
-            <a class="rmq-nav-item-link" href="#">Alrik</a>
+            <a class="rmq-nav-item-link" href="#">{{ session.channelName || 'anonymous' }}</a>
           </div>
           <div class="rmq-nav-options" v-on:click="isMenuOpen = !isMenuOpen">
             <transition name="rmq-fade-in">
@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="rmq-window-body">
-          <widget-chat v-if="realmq" class="rmq-chat" :realmq="realmq" :channel="session && session.channel" :user-id="session && session.userId"></widget-chat>
+          <widget-chat v-if="realmq" class="rmq-chat" :realmq="realmq" :channel="session && session.channelId" :user-id="session && session.userId"></widget-chat>
         </div>
         <div class="rmq-window-footer"></div>
       </div>
@@ -38,7 +38,9 @@
     },
     data: function() {
       return {
-        session: null,
+        session: {
+          channelName: 'anonymous',
+        },
         isOpen: false,
         isMenuOpen: false,
         realmq: null
