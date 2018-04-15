@@ -62,7 +62,7 @@
         var me = this;
 
         this.realmq.channels.list().then(function (channelList) {
-          channelList.items.sort((a, b) => {
+          channelList.items.sort(function (a, b) {
             return new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1;
           });
           $data.channelList = channelList;
