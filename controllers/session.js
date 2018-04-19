@@ -86,6 +86,11 @@ async function fetchCustomerSubscription({
       properties: {
         name: generateChannelName(),
       },
+      features: {
+        persistence: {
+          enabled: true,
+        },
+      },
     });
 
     subscription = await createSubscription({
