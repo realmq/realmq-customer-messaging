@@ -72,6 +72,8 @@
         me.onMessage(message.channel, message.data);
       });
 
+      this.loadPersistedMessages();
+
       $data.isConnected = realmq.rtm.isConnected;
     },
 
@@ -108,6 +110,18 @@
             text: text
           }]
         };
+      },
+
+      loadPersistedMessages: function() {
+        var me = this;
+
+        this.realmq.messages.list().then(function(messagesList) {
+          messagesList.items.forEach(function(message) {
+            me.messages.push(message);
+          });
+        }, function(err) {
+          console.warn('could not fetch persisted messages', err);
+        })
       }
     }
   }
