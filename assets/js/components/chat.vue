@@ -69,7 +69,7 @@
           return;
         }
 
-        me.onMessage(message.channel, message.data);
+        me.onMessage(message);
       });
 
       this.loadPersistedMessages();
@@ -78,8 +78,8 @@
     },
 
     methods: {
-      onMessage: function(channel, message) {
-        this.messages.push(message);
+      onMessage: function(message) {
+        this.messages.push(message.data);
       },
 
       isMyMessage: function(message) {
@@ -115,9 +115,11 @@
       loadPersistedMessages: function() {
         var me = this;
 
-        this.realmq.messages.list().then(function(messagesList) {
+        this.realmq.messages.list({
+          channel: this.channel,
+        }).then(function(messagesList) {
           messagesList.items.forEach(function(message) {
-            me.messages.push(message);
+            me.onMessage(message);
           });
         }, function(err) {
           console.warn('could not fetch persisted messages', err);
