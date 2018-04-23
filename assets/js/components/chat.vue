@@ -9,12 +9,15 @@
               <div v-for="part in message.content" v-if="part.text">
                 {{part.text}}
               </div>
+              <div class="rmq-message-date" :title="moment(message.ts).format('LLL')">
+                {{moment(message.ts).fromNow()}}
+              </div>
             </div>
           </div>
         </template>
       </div>
       <div class="rmq-chat-input">
-        <textarea class="rmq-message-input" v-model="messageInput"></textarea>
+        <textarea class="rmq-message-input" v-model="messageInput" @keydown="onMessageInputKeyDown($event)"></textarea>
         <div class="rmq-message-submit" @click="onMessageSubmit()"></div>
       </div>
     </template>
@@ -26,6 +29,8 @@
   </div>
 </template>
 <script>
+  var moment = require('moment');
+
   module.exports = {
     name: "widget-chat",
     props: {
@@ -78,8 +83,23 @@
     },
 
     methods: {
+      moment: function(ts) {
+        return moment(ts);
+      },
+
       onMessage: function(message) {
+        if (!this.validateChatMessage(message.data)) {
+          console.warn('Ignoring invalid message', message);
+          return;
+        }
         this.messages.push(message.data);
+      },
+
+      validateChatMessage: function(message) {
+        return message
+          && message.type === 'message' && message.ts
+          && message.from && message.from.userId
+          && message.content;
       },
 
       isMyMessage: function(message) {
@@ -96,6 +116,14 @@
           });
 
           this.$data.messageInput = '';
+        }
+      },
+
+      onMessageInputKeyDown: function(event) {
+        if (event.keyCode === 13 && !event.shiftKey) {
+          this.onMessageSubmit();
+          event.preventDefault();
+          return false;
         }
       },
 
@@ -119,7 +147,11 @@
           channel: this.channel,
         }).then(function(messagesList) {
           messagesList.items.forEach(function(message) {
-            me.onMessage(message);
+            if (!me.validateChatMessage(message.data)) {
+              console.warn('Ignoring invalid message', message);
+              return;
+            }
+            me.messages.unshift(message.data);
           });
         }, function(err) {
           console.warn('could not fetch persisted messages', err);
@@ -207,7 +239,7 @@
   }
 
   .rmq-message-body {
-    padding: 1rem;
+    padding: 1rem 1rem .5rem 1rem;
     min-height: $navHeight/1.5;
     margin: 0 1rem;
     @include material-shadow(1);
@@ -221,6 +253,12 @@
       width: 0;
       height: 0;
       border-style: solid;
+    }
+
+    .rmq-message-date {
+      text-align: right;
+      margin-top: .5rem;
+      font-size: .75rem;
     }
   }
 
