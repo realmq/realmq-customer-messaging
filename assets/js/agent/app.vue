@@ -65,7 +65,7 @@
 
         this.realmq.channels.list().then(function (channelList) {
           $data.channels = channelList.items.sort(function (a, b) {
-            return new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1;
+            return a.createdAt < b.createdAt ? 1 : -1;
           }).map(me.getChannelViewModel);
           me.activateChannel(channelList.count && channelList.items[0]);
         });
@@ -100,8 +100,6 @@
             if (!existentChannel) {
               existentChannel = me.getChannelViewModel(channel);
               channels.unshift(existentChannel);
-            } else {
-              // todo update channel data.
             }
           });
       },
