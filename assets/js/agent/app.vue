@@ -10,8 +10,8 @@
         <div class="rmq-channels">
           <h3>Channels</h3>
 
-          <div class="rmq-channel-list" v-if="channelList.count">
-            <template v-for="channel in channelList.items">
+          <div class="rmq-channel-list" v-if="channels.length">
+            <template v-for="channel in channels">
               <div class="rmq-list-item" :class="{'rmq-is-active': activeChat.channel === channel.id}" @click="activateChannel(channel)">
                 {{ channel.name }}<br>
                 <small>{{ channel.dateFormatted }}</small>
@@ -47,7 +47,7 @@
     },
     data: function() {
       return {
-        channelList: {},
+        channels: [],
         chats: {},
         activeChat: null,
         userId: null
@@ -56,6 +56,7 @@
     created: function() {
       this.loadUser();
       this.loadChannels();
+      this.syncSubscriptions();
     },
     methods: {
       loadChannels: function() {
@@ -63,18 +64,75 @@
         var me = this;
 
         this.realmq.channels.list().then(function (channelList) {
-          channelList.items.sort(function (a, b) {
+          $data.channels = channelList.items.sort(function (a, b) {
             return new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1;
-          }).map(function(channel) {
-            channel.name = (channel.properties || {}).name || channel.id;
-            channel.name = channel.name.length > 30
-              ? channel.name.substr(0, 20) + '...'
-              : channel.name;
-            channel.dateFormatted = moment(channel.createdAt).format('LLL');
-          });
-          $data.channelList = channelList;
+          }).map(me.getChannelViewModel);
           me.activateChannel(channelList.count && channelList.items[0]);
         });
+      },
+
+      getChannelViewModel: function(channel) {
+        var channelName = (channel.properties || {}).name || channel.id;
+        var viewModel = {
+          id: channel.id,
+          name: channelName.length > 30
+            ? channelName.substr(0, 20) + '...'
+            : channelName,
+          dateFormatted: moment(channel.createdAt).format('LLL'),
+          createdAt: channel.createdAt,
+          updatedAt: channel.updatedAt,
+        };
+
+        return viewModel;
+      },
+
+      onSubscriptionUpdated: function(subscription) {
+        var me = this;
+        var channels = this.channels;
+        var channelId = subscription.channelId;
+
+        this.realmq.channels.retrieve(channelId)
+          .then(function(channel) {
+            var existentChannel = channels.find(function(channel) {
+              return channel.id === channelId;
+            });
+
+            if (!existentChannel) {
+              existentChannel = me.getChannelViewModel(channel);
+              channels.unshift(existentChannel);
+            } else {
+              // todo update channel data.
+            }
+          });
+      },
+
+      onSubscriptionRemoved: function(subscription) {
+        var channelId = subscription.channelId;
+        var channelIndex = this.channels.findIndex(function(channel) {
+          return channel.id === channelId;
+        })
+
+        if (channelIndex > -1) {
+          this.channels.splice(channelIndex, 1);
+        }
+
+        var chat = this.chats[channelId];
+
+        if (chat) {
+          delete this.$data.chats[channelId];
+
+          if (this.channels.length) {
+            this.activateChannel(this.channels[0]);
+          }
+        }
+      },
+
+      syncSubscriptions: function() {
+        var rtm = this.realmq.rtm;
+
+        rtm.on('subscription-created', this.onSubscriptionUpdated.bind(this));
+        rtm.on('subscription-updated', this.onSubscriptionUpdated.bind(this));
+        rtm.on('subscription-deleted', this.onSubscriptionRemoved.bind(this));
       },
 
       loadUser: function() {
