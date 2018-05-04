@@ -8,7 +8,7 @@
       </div>
       <div class="rmq-window-body">
         <div class="rmq-channels">
-          <h3>Channels</h3>
+          <h3>Customer Chats</h3>
 
           <div class="rmq-channel-list" v-if="channels.length">
             <template v-for="channel in channels">
