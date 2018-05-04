@@ -3,17 +3,8 @@
     <transition name="rmq-fade-in">
       <div v-show="isOpen" class="rmq-window">
         <div class="rmq-window-nav">
-          <div class="rmq-nav-toggle"></div>
-          <div class="rmq-nav-item">
-            <a class="rmq-nav-item-link" href="#">{{ session.channelName || 'anonymous' }}</a>
-          </div>
-          <div class="rmq-nav-options" v-on:click="isMenuOpen = !isMenuOpen">
-            <transition name="rmq-fade-in">
-              <div v-if="isMenuOpen" class="rmq-widget-menu">
-                <a @click="isOpen = false" class="rmq-widget-menu-item">Close</a>
-              </div>
-            </transition>
-          </div>
+          <div class="rmq-nav-title">{{ session.channelName || 'anonymous' }}</div>
+          <div class="rmq-nav-close" v-on:click="isOpen = false"></div>
         </div>
         <div class="rmq-window-body">
           <widget-chat v-if="realmq" class="rmq-chat" :realmq="realmq" :channel="session && session.channelId" :user-id="session && session.userId"></widget-chat>

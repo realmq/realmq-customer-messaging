@@ -5,6 +5,7 @@
         <div class="rmq-nav-item rmq-nav-logo">
           <img src="https://realmq.com/img/logo.svg">
         </div>
+        <div class="rmq-nav-title">Agent Chat - Customer Chat Example</div>
       </div>
       <div class="rmq-window-body">
         <div class="rmq-channels">
@@ -198,7 +199,7 @@
 
     .rmq-list-item {
       cursor: pointer;
-      background: white;
+      background: rgba(255, 255, 255, 0.4);
       padding: 0.5rem;
       margin: 0 0.5rem 0.5rem 0;
 

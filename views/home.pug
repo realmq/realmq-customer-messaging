@@ -1,19 +1,79 @@
-style(type="text/css").
-  .page {
-    font-family: 'Dosis', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #323d47;
-    padding-top: 60px;
-  }
-  h1 {
-    font-weight: normal;
-  }
+html
+  head
+    style(type="text/css").
+      body {
+        font-family: 'Dosis', Helvetica, Arial, sans-serif;
+        font-size: 1.2rem;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #323d47;
+      }
+      body::after {
+        content: "";
+        background: url(/img/backdrop.svg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        opacity: 0.8;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        position: fixed;
+        z-index: -1;
+      }
+      h1 {
+        font-weight: normal;
+      }
+      a, a:visited, a:hover {
+        color: #3ac955;
+        text-decoration: none;
+      }
+      header {
+        margin: auto;
+        max-width: 640px;
+        padding-top: 60px;
+        text-align: center;
+      }
+      section.main {
+        margin: 4rem auto auto auto;
+        max-width: 640px;
+        text-align: center;
+      }
+      .how-it-works {
+        text-align: left;
+      }
+      .github-ribbon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: 0;
+      }
+  body
+    header
+      img(src="/img/logo.svg")
+      h1 Customer Messaging
 
-.page
-  img(src="https://realmq.com/img/logo.svg")
-  h1 RealMQ customer messaging
-  p A customer messaging reference implementation on top of RealMQ's instant messaging backbone.
+    section.main
+      .how-it-works
+        p
+          | This is an example implementation that realizes a simple customer messaging application on top
+          | of RealMQ.
+        p
+          | The application contains to parts - a public customer facing widget that can be
+          | implemented on any web page, and a private chat application that agents use to communicate with
+          | customers. Every time a new customer opens a page with the widget, it will create a new chat that
+          | automatically appears in the customer chat list on the agent app.
+        p
+          br
+          | See it in action:
+        ul
+          li Click the icon in the lower left corner to open a chat window.
+          li Open the #[a(href='/agent' target='_blank') agent chat] in a new tab or browser window.
+          li Start chatting!
+        | Pro tip: You can reference a customer chat by it's unique name shown in the top of the chat
+        | window
+    footer
 
 script(src="/js/widget.js")
