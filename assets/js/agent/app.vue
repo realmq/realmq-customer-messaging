@@ -5,10 +5,11 @@
         <div class="rmq-nav-item rmq-nav-logo">
           <img src="https://realmq.com/img/logo.svg">
         </div>
+        <div class="rmq-nav-title">Agent Chat - Customer Chat Example</div>
       </div>
       <div class="rmq-window-body">
         <div class="rmq-channels">
-          <h3>Channels</h3>
+          <h3>Customer Chats</h3>
 
           <div class="rmq-channel-list" v-if="channels.length">
             <template v-for="channel in channels">
@@ -198,7 +199,7 @@
 
     .rmq-list-item {
       cursor: pointer;
-      background: white;
+      background: rgba(255, 255, 255, 0.4);
       padding: 0.5rem;
       margin: 0 0.5rem 0.5rem 0;
 

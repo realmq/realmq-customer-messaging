@@ -11,9 +11,10 @@
     "lint": "xo",
     "lint-fix": "xo --fix",
     "start": "node server",
+    "debug": "node --inspect=0.0.0.0:9229 server",
     "test": "echo 'No tests, yet' && exit 1",
-    "build-agent": "mkdir -p public/js && browserify assets/js/agent.js > public/js/agent.js",
-    "build-widget": "mkdir -p public/js && browserify assets/js/widget.js > public/js/widget.js",
+    "build-agent": "mkdir -p public/js && mkdir -p public/img && browserify assets/js/agent.js > public/js/agent.js && cp assets/img/* public/img",
+    "build-widget": "mkdir -p public/js && mkdir -p public/img && browserify assets/js/widget.js > public/js/widget.js && cp assets/img/* public/img",
     "dist": "export NODE_ENV=production; for p in agent widget; do yarn build-${p} && uglifyjs public/js/${p}.js -o public/js/${p}.min.js; done",
     "postinstall": "yarn dist"
   },
@@ -76,7 +77,8 @@
     "pug": "^2.0.3",
     "sequelize": "^4.37.6",
     "uuid": "^3.2.1",
-    "vue": "^2.5.16"
+    "vue": "^2.5.16",
+    "vue-chat-scroll": "^1.2.1"
   },
   "browserify": {
     "transform": [

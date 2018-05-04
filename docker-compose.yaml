@@ -4,6 +4,7 @@ services:
     image: node:onbuild
     ports:
       - 8889:8889
+      - 9229:9229
     environment:
       - PORT=8889
       - AGENT_USERNAME=james
@@ -17,6 +18,7 @@ services:
       - .:/usr/src/app
     links:
       - postgresql:postgresql
+    command: npm run debug
   postgresql:
     image: bitnami/postgresql
     ports:

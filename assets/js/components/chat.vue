@@ -1,7 +1,7 @@
 <template>
   <div class="rmq-chat">
     <template v-if="realmq && isConnected">
-      <div class="rmq-messages">
+      <div class="rmq-messages" v-chat-scroll>
         <template v-for="message in messages">
           <div class="rmq-message" :class="{'rmq-is-me': isMyMessage(message), 'rmq-is-them': !isMyMessage(message)}">
             <div class="rmq-message-sender"></div>
