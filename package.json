@@ -77,7 +77,8 @@
     "pug": "^2.0.3",
     "sequelize": "^4.37.6",
     "uuid": "^3.2.1",
-    "vue": "^2.5.16"
+    "vue": "^2.5.16",
+    "vue-chat-scroll": "^1.2.1"
   },
   "browserify": {
     "transform": [
