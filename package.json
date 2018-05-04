@@ -11,6 +11,7 @@
     "lint": "xo",
     "lint-fix": "xo --fix",
     "start": "node server",
+    "debug": "node --inspect=0.0.0.0:9229 server",
     "test": "echo 'No tests, yet' && exit 1",
     "build-agent": "mkdir -p public/js && browserify assets/js/agent.js > public/js/agent.js",
     "build-widget": "mkdir -p public/js && browserify assets/js/widget.js > public/js/widget.js",
