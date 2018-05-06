@@ -59,12 +59,12 @@ html
     section.main
       .how-it-works
         p
-          | This is an example implementation that implements a simple customer messaging application on top
-          | of RealMQ.
+          | This is an example application that implements a simple customer messaging
+          | system on top of RealMQ.
         p
           | The application consists of two parts - a public customer facing widget that can be
-          | implemented on any web page, and a private chat application that agents use to communicate with
-          | customers. Every time a new customer opens a page with the widget, it will create a new chat that
+          | included on a web page, and a private chat application that agents use to communicate with
+          | customers. Every time a new customer opens a page with the widget on it, it will create a new chat that
           | automatically appears on the customer chat list in the agent app.
         p
           br
@@ -73,8 +73,7 @@ html
           li Click the icon in the lower right corner to open a chat window.
           li Open the #[a(href='/agent' target='_blank') agent chat] in a new tab or browser window.
           li Start chatting!
-        | Pro tip: You can reference a customer chat by its unique name shown in the top of the chat
+        | Pro tip: You can reference a customer chat by its unique name shown in the top of
         | the chat widget.
-    footer
 
 script(src="/js/widget.js")
