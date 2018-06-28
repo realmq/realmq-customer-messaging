@@ -77,7 +77,7 @@ async function fetchCustomerSubscription({
     subscription = await retrieveSubscription(subscriptionId);
     channel = await retrieveChannel(channelId);
   } catch (err) {
-    if (err.code !== 'RESOURCE_NOT_FOUND') {
+    if (err.code !== 'UnknownSubscription') {
       throw err;
     }
 
@@ -138,7 +138,7 @@ async function ensureAgentSubscription({
         await retrieveSubscription(subscriptionKey)
       );
     } catch (err) {
-      if (err.code !== 'RESOURCE_NOT_FOUND') {
+      if (err.code !== 'UnknownSubscription') {
         throw err;
       }
 
