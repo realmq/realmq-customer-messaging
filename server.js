@@ -41,7 +41,9 @@ try {
     users: {[username]: password},
     challenge: true,
   });
-  app.locals.realmq = new RealMQ(config.realmq.token);
+  app.locals.realmq = new RealMQ(config.realmq.token, {
+    host: config.realmq.host,
+  });
 
   app.set('port', config.port);
   app.set('views', path.join(__dirname, 'views'));

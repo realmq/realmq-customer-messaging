@@ -28,6 +28,11 @@
     components: {
       'widget-chat': Chat,
     },
+    props: {
+      realmqHost: {
+        required: true
+      }
+    },
     data: function() {
       return {
         session: {
@@ -52,7 +57,7 @@
         })
       },
       initializeRealmq: function() {
-        this.$data.realmq = new RealMQ(this.session.token, { autoSubscribe: true });
+        this.$data.realmq = new RealMQ(this.session.token, { host: this.realmqHost, autoSubscribe: true });
       }
     }
   };

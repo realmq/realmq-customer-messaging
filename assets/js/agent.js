@@ -8,7 +8,10 @@ var App = require('./agent/app.vue');
 var VueApp = Vue.extend(App);
 var appNode = document.getElementById('app');
 
-var realmq = new RealMQ(appNode.dataset.authToken, {autoSubscribe: true});
+var realmq = new RealMQ(appNode.dataset.authToken, {
+  host: process.env.REALMQ_HOST,
+  autoSubscribe: true
+});
 
 Vue.use(VueChatScroll);
 

@@ -25,6 +25,7 @@ module.exports = {
 
   realmq: {
     token: env.REALMQ_TOKEN,
+    host: env.REALMQ_HOST,
   },
 
   session: {

@@ -49,6 +49,7 @@ $ cp .env.tpl .env
 | Env Var | Description | Default |
 |---------|---|---|
 | `REALMQ_TOKEN` | Realmq admin token for setup and managing clients, channels, messaging.<br>:point_right: This configuration variable is **REQUIRED** | - |
+| `REALMQ_HOST` | Can be set to custom realmq deployment. | - |
 | `PORT` | http port the server will listen to | **8080** |
 | `AGENT_USERNAME` | Username required to access `/agent` | **agent** |
 | `AGENT_PASSWORD` | Password of the agent user | **password** |
