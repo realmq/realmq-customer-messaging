@@ -1,6 +1,6 @@
 {
   "name": "@realmq/customer-messaging",
-  "version": "0.1.0-alpha2",
+  "version": "0.1.0-alpha6",
   "description": "An intercom-like customer messaging reference implementation on top of RealMQ's instant messaging backbone.",
   "author": "RealMQ GmbH <service@realmq.com> (https://realmq.com)",
   "license": "MIT",
