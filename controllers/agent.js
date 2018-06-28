@@ -2,34 +2,12 @@
 
 const {toAgentUserName} = require('../lib/agent');
 
-// Only required until we have proper session storage.
-const authCache = new Map();
-
-async function fetchAgentSession({
-  cache,
-  agentId,
-  tokenResource: {retrieve, create},
-}) {
-  if (!cache.has(agentId)) {
-    try {
-      cache.set(agentId, await retrieve(agentId));
-    } catch (err) {
-      if (err.code !== 'RESOURCE_NOT_FOUND') {
-        throw err;
-      }
-
-      cache.set(
-        agentId,
-        await create({
-          id: agentId,
-          userId: agentId,
-          description: 'Agent Session',
-        })
-      );
-    }
-  }
-
-  return cache.get(agentId);
+async function fetchAgentSession({agentId, tokenResource: {create}}) {
+  const token = await create({
+    userId: agentId,
+    description: 'Agent Session',
+  });
+  return token;
 }
 
 module.exports = {
@@ -39,7 +17,6 @@ module.exports = {
 
     const session = await fetchAgentSession({
       agentId: toAgentUserName(user),
-      cache: authCache,
       tokenResource: realmq.tokens,
     });
 
