@@ -36,6 +36,23 @@
   var Chat = require('../components/chat.vue');
   var moment = require('moment');
 
+  var loadAllChannels = function(realmq, callback, limit, offset, channels) {
+    limit = limit || 20;
+    offset = offset || 0;
+    channels = channels || [];
+    realmq.channels.list({limit: limit, offset: offset})
+      .then(function (list) {
+        channels = channels.concat(list.items);
+        if (list.offset + list.count >= list.total) {
+          return callback(null, channels);
+        }
+        loadAllChannels(realmq, callback, limit, offset + limit, channels);
+      })
+      .catch(function (err) {
+        callback(err);
+      });
+  };
+
   module.exports = {
     name: 'app',
     components: {
@@ -63,6 +80,17 @@
       loadChannels: function() {
         var $data = this.$data;
         var me = this;
+
+        loadAllChannels(this.realmq, function (err, channels) {
+          if (err) {
+            $data.channels = [];
+            return;
+          }
+          $data.channels = channels.sort(function (a, b) {
+            return a.createdAt < b.createdAt ? 1 : -1;
+          }).map(me.getChannelViewModel);
+          me.activateChannel(channels.length && channels[0]);
+        });
 
         this.realmq.channels.list().then(function (channelList) {
           $data.channels = channelList.items.sort(function (a, b) {
