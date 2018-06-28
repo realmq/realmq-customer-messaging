@@ -21,6 +21,7 @@
   var Chat = require('../components/chat.vue');
 
   var apiClient = new RealMQ.ApiClient(null, { baseUrl: '/' });
+  apiClient.basePath = '';
 
   module.exports = {
     name: 'app',
