@@ -91,13 +91,6 @@
           }).map(me.getChannelViewModel);
           me.activateChannel(channels.length && channels[0]);
         });
-
-        this.realmq.channels.list().then(function (channelList) {
-          $data.channels = channelList.items.sort(function (a, b) {
-            return a.createdAt < b.createdAt ? 1 : -1;
-          }).map(me.getChannelViewModel);
-          me.activateChannel(channelList.count && channelList.items[0]);
-        });
       },
 
       getChannelViewModel: function(channel) {
