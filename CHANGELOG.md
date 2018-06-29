@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Adjust api responses to adapt latest changes. #5
+- Upgraded deps to `@realmq/web-sdk@0.1.0`, `@realmq/node-sdk@0.1.0`. #5
+
+### Added
+- Add support for using the app on custom realmq instance by setting `REALMQ_HOST` env var.
 
 ## [0.1.0-alpha7] - 2018-06-29
 ### Fixed
