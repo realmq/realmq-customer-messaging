@@ -23,16 +23,16 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@realmq/node-sdk@^0.1.0-alpha1":
-  version "0.1.0-alpha1"
-  resolved "https://registry.yarnpkg.com/@realmq/node-sdk/-/node-sdk-0.1.0-alpha1.tgz#1d78be619d4f2b81379b9104604f380e3b2043e9"
+"@realmq/node-sdk@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@realmq/node-sdk/-/node-sdk-0.1.0.tgz#a5374ac1590a161a292ddd0682cf6feb4b83b59c"
   dependencies:
     mqtt "^2.17.0"
     request "^2.85.0"
 
-"@realmq/web-sdk@^0.1.0-alpha7":
-  version "0.1.0-alpha7"
-  resolved "https://registry.yarnpkg.com/@realmq/web-sdk/-/web-sdk-0.1.0-alpha7.tgz#99ca49bb95ad8da10f3ff6bc0d32c5581722db35"
+"@realmq/web-sdk@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@realmq/web-sdk/-/web-sdk-0.1.0.tgz#ba7e9dc94e8bb2f1b20d4083886857b67e016db8"
   dependencies:
     base64-js "^1.3.0"
     paho-mqtt "^1.0.4"
