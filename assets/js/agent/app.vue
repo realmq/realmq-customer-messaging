@@ -33,10 +33,10 @@
 </template>
 
 <script>
-  var Chat = require('../components/chat.vue');
-  var moment = require('moment');
+  import Chat from '../components/chat.vue';
+  import moment from 'moment';
 
-  var loadAllChannels = function(realmq, callback, limit, offset, channels) {
+  const loadAllChannels = function(realmq, callback, limit, offset, channels) {
     limit = limit || 20;
     offset = offset || 0;
     channels = channels || [];
@@ -53,7 +53,7 @@
       });
   };
 
-  module.exports = {
+  export default {
     name: 'app',
     components: {
       chat: Chat
@@ -63,7 +63,7 @@
         required: true
       }
     },
-    data: function() {
+    data() {
       return {
         channels: [],
         chats: {},
@@ -71,15 +71,15 @@
         userId: null
       }
     },
-    created: function() {
+    created() {
       this.loadUser();
       this.loadChannels();
       this.syncSubscriptions();
     },
     methods: {
-      loadChannels: function() {
-        var $data = this.$data;
-        var me = this;
+      loadChannels() {
+        const $data = this.$data;
+        const me = this;
 
         loadAllChannels(this.realmq, function (err, channels) {
           if (err) {
@@ -93,9 +93,9 @@
         });
       },
 
-      getChannelViewModel: function(channel) {
-        var channelName = (channel.properties || {}).name || channel.id;
-        var viewModel = {
+      getChannelViewModel(channel) {
+        const channelName = (channel.properties || {}).name || channel.id;
+        const viewModel = {
           id: channel.id,
           name: channelName.length > 30
             ? channelName.substr(0, 20) + '...'
@@ -108,14 +108,14 @@
         return viewModel;
       },
 
-      onSubscriptionUpdated: function(subscription) {
-        var me = this;
-        var channels = this.channels;
-        var channelId = subscription.channelId;
+      onSubscriptionUpdated(subscription) {
+        const me = this;
+        const channels = this.channels;
+        const channelId = subscription.channelId;
 
         this.realmq.channels.retrieve(channelId)
           .then(function(channel) {
-            var existentChannel = channels.find(function(channel) {
+            let existentChannel = channels.find(function(channel) {
               return channel.id === channelId;
             });
 
@@ -126,9 +126,9 @@
           });
       },
 
-      onSubscriptionRemoved: function(subscription) {
-        var channelId = subscription.channelId;
-        var channelIndex = this.channels.findIndex(function(channel) {
+      onSubscriptionRemoved(subscription) {
+        const channelId = subscription.channelId;
+        const channelIndex = this.channels.findIndex(function(channel) {
           return channel.id === channelId;
         })
 
@@ -136,7 +136,7 @@
           this.channels.splice(channelIndex, 1);
         }
 
-        var chat = this.chats[channelId];
+        const chat = this.chats[channelId];
 
         if (chat) {
           delete this.$data.chats[channelId];
@@ -147,25 +147,25 @@
         }
       },
 
-      syncSubscriptions: function() {
-        var rtm = this.realmq.rtm;
+      syncSubscriptions() {
+        const rtm = this.realmq.rtm;
 
         rtm.on('subscription-created', this.onSubscriptionUpdated.bind(this));
         rtm.on('subscription-updated', this.onSubscriptionUpdated.bind(this));
         rtm.on('subscription-deleted', this.onSubscriptionRemoved.bind(this));
       },
 
-      loadUser: function() {
-        var $data = this.$data;
+      loadUser() {
+        const $data = this.$data;
 
         this.realmq.me.user.retrieve().then(function(user) {
           $data.userId = user.id;
         });
       },
 
-      activateChannel: function(channel) {
-        var chats = this.$data.chats;
-        var chatId = channel.id;
+      activateChannel(channel) {
+        const chats = this.$data.chats;
+        const chatId = channel.id;
 
         if (!chats[chatId]) {
           chats[chatId] = {
