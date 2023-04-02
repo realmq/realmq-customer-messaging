@@ -6,9 +6,11 @@
           <div class="rmq-message" :class="{'rmq-is-me': isMyMessage(message), 'rmq-is-them': !isMyMessage(message)}">
             <div class="rmq-message-sender"></div>
             <div class="rmq-message-body">
-              <div v-for="part in message.content" v-if="part.text">
-                {{part.text}}
-              </div>
+              <template v-for="part in message.content">
+                <div v-if="part.text">
+                  {{part.text}}
+                </div>
+              </template>
               <div class="rmq-message-date" :title="moment(message.ts).format('LLL')">
                 {{moment(message.ts).fromNow()}}
               </div>
@@ -29,9 +31,9 @@
   </div>
 </template>
 <script>
-  var moment = require('moment');
+  import moment from 'moment';
 
-  module.exports = {
+  export default {
     name: "widget-chat",
     props: {
       realmq: {
@@ -44,17 +46,17 @@
         required: true
       }
     },
-    data: function() {
+    data() {
       return {
         isConnected: false,
         messages: [],
         messageInput: ''
       };
     },
-    created: function() {
-      var realmq = this.realmq;
-      var $data = this.$data;
-      var me = this;
+    created() {
+      const realmq = this.realmq;
+      const $data = this.$data;
+      const me = this;
 
       realmq.rtm.on('connected', function() {
         $data.isConnected = true;
@@ -83,11 +85,11 @@
     },
 
     methods: {
-      moment: function(ts) {
+      moment(ts) {
         return moment(ts);
       },
 
-      onMessage: function(message) {
+      onMessage(message) {
         if (!this.validateChatMessage(message.data)) {
           console.warn('Ignoring invalid message', message);
           return;
@@ -95,19 +97,19 @@
         this.messages.push(message.data);
       },
 
-      validateChatMessage: function(message) {
+      validateChatMessage(message) {
         return message
           && message.type === 'message' && message.ts
           && message.from && message.from.userId
           && message.content;
       },
 
-      isMyMessage: function(message) {
+      isMyMessage(message) {
         return message.from.userId === this.userId;
       },
 
-      onMessageSubmit: function() {
-        var message = this.messageInput.trim();
+      onMessageSubmit() {
+        const message = this.messageInput.trim();
 
         if (message) {
           this.realmq.rtm.publish({
@@ -119,7 +121,7 @@
         }
       },
 
-      onMessageInputKeyDown: function(event) {
+      onMessageInputKeyDown(event) {
         if (event.keyCode === 13 && !event.shiftKey) {
           this.onMessageSubmit();
           event.preventDefault();
@@ -127,7 +129,7 @@
         }
       },
 
-      _assembleMessage: function(text) {
+      _assembleMessage(text) {
         return {
           type: 'message',
           ts: (new Date).toISOString(),
@@ -140,8 +142,8 @@
         };
       },
 
-      loadPersistedMessages: function() {
-        var me = this;
+      loadPersistedMessages() {
+        const me = this;
 
         this.realmq.messages.list({
           channel: this.channel,
@@ -194,10 +196,9 @@
       background: $white;
       border: none;
       width: calc(100% - #{$navHeight});
-      padding: .5rem;
       resize: none;
       overflow: scroll;
-      padding-top: ($navHeight/2) - 8;
+      padding: ($navHeight/2) - 8 .5rem .5rem;
       font-weight: 300;
       font-family: $font-sans-serif;
       font-size: 16px;

@@ -23,19 +23,19 @@ You can do that by sending an email to service@realmq.com.
 First install dependencies:
 
 ```bash
-$ yarn
+$ npm i
 ```
 
 Build the vue apps (agent & chat-widget)
 
 ```bash
-$ yarn dist
+$ npm run dist
 ```
 
 Start the express app
 
 ```bash
-$ yarn start
+$ npm run start
 ```
 
 ## Configuration
@@ -46,13 +46,14 @@ The app can be configured via environment variables and/or `.env` file.
 $ cp .env.tpl .env
 ```
 
-| Env Var | Description | Default |
-|---------|---|---|
-| `REALMQ_TOKEN` | Realmq admin token for setup and managing clients, channels, messaging.<br>:point_right: This configuration variable is **REQUIRED** | - |
-| `REALMQ_HOST` | Can be set to custom realmq deployment. | - |
-| `PORT` | http port the server will listen to | **8080** |
-| `AGENT_USERNAME` | Username required to access `/agent` | **agent** |
-| `AGENT_PASSWORD` | Password of the agent user | **password** |
+| Env Var                | Description                                                                                                                          | Default      |
+|------------------------|--------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| `REALMQ_TOKEN`         | Realmq admin token for setup and managing clients, channels, messaging.<br>:point_right: This configuration variable is **REQUIRED** | -            |
+| `REALMQ_HOST`          | Can be set to custom realmq deployment.                                                                                              | realmq.com   |
+| `PORT`                 | http port the server will listen to                                                                                                  | **8080**     |
+| `AGENT_USERNAME`       | Username required to access `/agent`                                                                                                 | **agent**    |
+| `AGENT_PASSWORD`       | Password of the agent user                                                                                                           | **password** |
+| `REALMQ_LOCAL_HOST_IP` | IP address of the realmq local host. This allows for using this repo against local realmq platform instance.                         | -            |
 
 ---
 

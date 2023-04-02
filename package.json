@@ -13,20 +13,35 @@
     "start": "node server",
     "debug": "node --inspect=0.0.0.0:9229 server",
     "test": "echo 'No tests, yet' && exit 1",
-    "build-agent": "mkdir -p public/js && mkdir -p public/img && node -r dotenv/config node_modules/.bin/browserify -t envify assets/js/agent.js > public/js/agent.js && cp assets/img/* public/img",
-    "build-widget": "mkdir -p public/js && mkdir -p public/img && node -r dotenv/config node_modules/.bin/browserify -t envify assets/js/widget.js > public/js/widget.js && cp assets/img/* public/img",
-    "dist": "export NODE_ENV=production; for p in agent widget; do yarn build-${p} && uglifyjs public/js/${p}.js -o public/js/${p}.min.js; done",
-    "postinstall": "yarn dist"
+    "build-agent": "mkdir -p public/js && mkdir -p public/img && parcel build --no-cache --target agent && cp assets/img/* public/img",
+    "build-widget": "mkdir -p public/js && mkdir -p public/img && parcel build --no-cache --target widget && cp assets/img/* public/img",
+    "dist": "export NODE_ENV=production; for p in agent widget; do npm run build-${p}; done"
   },
   "main": "server.js",
   "engines": {
-    "node": ">= 8"
+    "node": ">= 16"
   },
   "lint-staged": {
     "*.js": [
-      "yarn lint-fix",
+      "npm run lint-fix",
       "git add"
     ]
+  },
+  "targets": {
+    "agent": {
+      "source": "assets/js/agent.mjs",
+      "distDir": "public/js/",
+      "engines": {
+        "browsers": "> 0.5%, last 2 versions, not dead"
+      }
+    },
+    "widget": {
+      "source": "assets/js/widget.mjs",
+      "distDir": "public/js/",
+      "engines": {
+        "browsers": "> 0.5%, last 2 versions, not dead"
+      }
+    }
   },
   "xo": {
     "space": true,
@@ -52,41 +67,30 @@
     ]
   },
   "devDependencies": {
-    "browserify": "^16.1.1",
-    "envify": "^4.1.0",
-    "husky": "^0.14.3",
-    "lint-staged": "^7.0.4",
-    "node-sass": "^4.8.3",
-    "uglify-js": "^3.3.20",
-    "vueify": "^9.4.1",
+    "@parcel/transformer-vue": "^2.8.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0",
+    "parcel": "^2.8.3",
+    "sass": "^1.60.0",
     "xo": "^0.20.3"
   },
   "dependencies": {
-    "@realmq/node-sdk": "^0.1.0",
-    "@realmq/web-sdk": "^0.1.0",
+    "@realmq/node-sdk": "^0.2.1",
+    "@realmq/web-sdk": "^0.2.0",
     "chalk": "^2.3.2",
-    "connect-session-sequelize": "^5.2.1",
+    "connect-session-sequelize": "^7.1.5",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "express-basic-auth": "^1.1.4",
     "express-session": "^1.15.6",
-    "moment": "^2.22.1",
+    "moment": "^2.29.4",
     "moniker": "^0.1.2",
-    "morgan": "^1.9.0",
-    "pg": "^7.4.1",
+    "morgan": "^1.10.0",
+    "pg": "^8.10.0",
     "pug": "^2.0.3",
-    "sequelize": "^4.37.6",
+    "sequelize": "^6.30.0",
     "uuid": "^3.2.1",
-    "vue": "^2.5.16",
-    "vue-chat-scroll": "^1.2.1"
-  },
-  "browserify": {
-    "transform": [
-      "envify",
-      "vueify"
-    ]
-  },
-  "browser": {
-    "vue": "vue/dist/vue.common.js"
+    "vue": "^3.2.47",
+    "vue3-chat-scroll": "^0.2.0"
   }
 }

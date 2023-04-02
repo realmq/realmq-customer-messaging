@@ -4,7 +4,6 @@ services:
     image: node:onbuild
     ports:
       - 8889:8889
-      - 9229:9229
     environment:
       - PORT=8889
       - AGENT_USERNAME=james
@@ -12,19 +11,23 @@ services:
       - DB_HOST=postgresql
       - DB_PORT=5432
       - DB_NAME=realmq
-      - DB_USER=postgres
-      - DB_PASS=realmq
+      - DB_USER=realmq
+      - DB_PASS=secret
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
     volumes:
       - .:/usr/src/app
     links:
       - postgresql:postgresql
-    command: npm run debug
+    command: npm run start
+    extra_hosts:
+      - api.realmq.local:${REALMQ_LOCAL_HOST_IP:-0.0.0.0}
+      - rtm.realmq.local:${REALMQ_LOCAL_HOST_IP:-0.0.0.0}
   postgresql:
-    image: bitnami/postgresql
-    ports:
-      - 5432:5432
+    image: postgres:14
+    restart: always
     environment:
-      - POSTGRESQL_DATABASE=realmq
-      - POSTGRESQL_PASSWORD=realmq
-    volumes:
-      - ./.db:/bitnami/postgresql
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: realmq
+      POSTGRES_DB: realmq
+    ports:
+      - ${HOST_BIND_ADDRESS:-127.0.0.1}:5432:5432

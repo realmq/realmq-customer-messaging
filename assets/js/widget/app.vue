@@ -17,13 +17,13 @@
 </template>
 
 <script>
-  var RealMQ = require('@realmq/web-sdk/lib/realmq');
-  var Chat = require('../components/chat.vue');
+  import RealMQ from '@realmq/web-sdk';
+  import Chat from '../components/chat.vue';
 
-  var apiClient = new RealMQ.ApiClient(null, { baseUrl: '/' });
+  const apiClient = new RealMQ.ApiClient(null, { baseUrl: '/' });
   apiClient.basePath = '';
 
-  module.exports = {
+  export default {
     name: 'app',
     components: {
       'widget-chat': Chat,
@@ -33,7 +33,7 @@
         required: true
       }
     },
-    data: function() {
+    data() {
       return {
         session: {
           channelName: 'anonymous',
@@ -43,11 +43,12 @@
         realmq: null
       };
     },
-    created: function() {
+    created() {
+      console.warn('APP created')
       this.loadSession().then(this.initializeRealmq.bind(this));
     },
     methods: {
-      loadSession: function() {
+      loadSession() {
         var $data = this.$data;
 
         return apiClient.get({ path: 'session' }).then(function(session) {
@@ -56,7 +57,7 @@
           return session;
         })
       },
-      initializeRealmq: function() {
+      initializeRealmq() {
         this.$data.realmq = new RealMQ(this.session.token, { host: this.realmqHost, autoSubscribe: true });
       }
     }
